@@ -1,20 +1,20 @@
 .venv
 
-# 虚拟环境
+# virtual environment
 .venv
 venv/
 
-# Python 缓存文件
+# Python cache file
 __pycache__/
 *.pyc
 
-# IDE 配置文件
+# IDE profile
 .vscode/
 .idea/
 
-# macOS 系统文件
+# macOS system files
 .DS_Store
 
-# 其他临时文件
+# Other temporary documents
 *.log
 *.pid
