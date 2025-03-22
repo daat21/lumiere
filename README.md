@@ -32,9 +32,10 @@ Should return:
 fastapi dev ./app/main.py
 
 for accessing the Server and API docs, refer to the links within the returned text in the terminal after running the above command in the format : 
- │  Serving at: http://127.0.0.1:8000                  │
- │                                                     │
- │  API docs: http://127.0.0.1:8000/docs               │
+│  Serving at: http://127.0.0.1:8000                  │
+│                                                     │
+│  API docs: http://127.0.0.1:8000/docs               │
+
 Windows (CTRL+Click) MacOS (CMD+Click) 
 
 ## To stop FastAPI Back end
