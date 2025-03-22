@@ -8,24 +8,41 @@
 5. Easy collaboration: You can share your requirements.txt so others can recreate the same environment.
 6. Deployment-ready: Most deployment tools (like Docker, Heroku, or CI/CD) expect isolated environments.
 
-## To Activate Virtual Environment
-### For Windows:
+## How to set up venv?
+## Environment Settings
+The following steps guide you through setting up your development environment locally to ensure that you can run the FastAPI backend.
+### 1.Clone project to local：
+```bash
+git clone <repository-url>
+cd NL1C_project
+```
+### 2.Check Pyhton verison
+python3 --version
+
+Should return:
+Python 3.9.6
+
+### 3.Create a virtual environment
+python3 -m venv .venv
+pip install -r requirements.txt
+
+### 4.Activate virtual environment
+#### For Windows:
 .venv\Scripts\activate
-### For MacOS:
+#### For MacOS:
 source .venv/bin/activate
+(When activated, your terminal prompt should change to (.venv).)
 
-## To confirm Virtual Environment activation
-### For Windows:
-where python
+### 5.Install dependencies
+pip install -r requirements.txt
 
-Should return:
-.venv\Scripts\python
-
-### For MacOS:
-which python
-
-Should return:
-.venv/bin/python
+## Starting MongoDB
+### Check the MongoDB service:
+brew services list
+### Starting MongoDB
+brew services start mongodb-community@7.0
+### If MongoDB is not installed, install:
+brew install mongodb-community@7.0
 
 ## To run FastAPI Back end
 ### For Windows and MacOS:
