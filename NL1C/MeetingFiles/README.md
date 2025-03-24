@@ -11,7 +11,7 @@ To ensure clear communication and consistent documentation across the project, a
 
 ### Basic Format
 
-[MeetingType]_[DocumentType]Sprint[Number]-Week[Number]-[MeetingNumber][OptionalDate].md
+[MeetingType]_[DocumentType]Sprint[Number]-Week[Number]-[MeetingNumber][OptionalDate].pdf
 
 ---
 
@@ -20,17 +20,17 @@ To ensure clear communication and consistent documentation across the project, a
 
 | File Type | File Name |
 |-----------|-----------|
-| Client Meeting Agenda | 'Client_Agenda_Sprint1-Week2.md' |
-| Client Meeting Minutes | 'Client_Minutes_Sprint1-Week2_2025-03-25.md' |
+| Client Meeting Agenda | 'Client_Agenda_Sprint1-Week2.pdf' |
+| Client Meeting Minutes | 'Client_Minutes_Sprint1-Week2_2025-03-25.pdf' |
 
 #### Multiple Group Meetings in One Week
 
 | File Type | File Name |
 |-----------|-----------|
-| First Group Agenda | 'Group_Agenda_Sprint1-Week2-1.md' |
-| First Group Minutes | 'Group_Minutes_Sprint1-Week2-1_2025-03-24.md' |
-| Second Group Agenda | 'Group_Agenda_Sprint1-Week2-2.md' |
-| Second Group Minutes | 'Group_Minutes_Sprint1-Week2-2_2025-03-28.md' |
+| First Group Agenda | 'Group_Agenda_Sprint1-Week2-1.pdf' |
+| First Group Minutes | 'Group_Minutes_Sprint1-Week2-1_2025-03-24.pdf' |
+| Second Group Agenda | 'Group_Agenda_Sprint1-Week2-2.pdf' |
+| Second Group Minutes | 'Group_Minutes_Sprint1-Week2-2_2025-03-28.pdf' |
 
 ---
 
