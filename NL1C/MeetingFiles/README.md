@@ -30,6 +30,7 @@ To ensure clear communication and consistent documentation across the project, a
 | First Group Agenda | 'Group_Agenda_Sprint1-Week2-1.pdf' |
 | First Group Minutes | 'Group_Minutes_Sprint1-Week2-1_2025-03-24.pdf' |
 | Second Group Agenda | 'Group_Agenda_Sprint1-Week2-2.pdf' |
+| Second Group Agenda | 'Group_Agenda_Sprint1-Week2-2.pdf' |
 | Second Group Minutes | 'Group_Minutes_Sprint1-Week2-2_2025-03-28.pdf' |
 
 ---
@@ -37,4 +38,4 @@ To ensure clear communication and consistent documentation across the project, a
 ### Notes
 - 'Minutes' files **should** include the date for better traceability.
 - The '-1', '-2' suffix is used **only when there are multiple meetings in the same week**.
-- All files are written in **Markdown (.md)** format for GitHub compatibility and version control.
+- All files are written in **PDF (.pdf)** format for GitHub compatibility.
