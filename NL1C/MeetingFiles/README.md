@@ -30,7 +30,6 @@ To ensure clear communication and consistent documentation across the project, a
 | First Group Agenda | 'Group_Agenda_Sprint1-Week2-1.pdf' |
 | First Group Minutes | 'Group_Minutes_Sprint1-Week2-1_2025-03-24.pdf' |
 | Second Group Agenda | 'Group_Agenda_Sprint1-Week2-2.pdf' |
-| Second Group Agenda | 'Group_Agenda_Sprint1-Week2-2.pdf' |
 | Second Group Minutes | 'Group_Minutes_Sprint1-Week2-2_2025-03-28.pdf' |
 
 ---
