@@ -1,19 +1,14 @@
 from pydantic import BaseModel
-from typing import Optional, List
-
-class Review(BaseModel):
-    user_id: str
-    rating: float
-    comment: str
-    created_at: Optional[str] = None
+from typing import List, Optional
 
 class Movie(BaseModel):
-    id: Optional[str]
+    # TMDb Movie ID
+    id: str  
     title: str
-    genre:List[str]
-    year: int
-    director: str
-    actors: List[str]
-    average_rating: Optional[float]
-    description: str
-    reviews: Optional[List[Review]]=[]
+    genre: List[str]
+    year: Optional[int] = None
+    average_rating: float
+    overview: Optional[str] = None
+
+    class Config:
+        extra = "ignore"
