@@ -1,6 +1,7 @@
+# pylint: disable=missing-docstring
+import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
@@ -11,6 +12,7 @@ client = None
 db = None
 movies_collection = None
 
+
 async def init_db():
     global client, db, movies_collection
     if not MONGO_URI:
@@ -20,6 +22,7 @@ async def init_db():
     movies_collection = db.get_collection("movies")
     print(f"movies_collection initialized: {movies_collection is not None}")
     print("Connected to MongoDB Atlas")
+
 
 async def close_db():
     global client

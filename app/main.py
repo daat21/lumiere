@@ -1,10 +1,10 @@
-from fastapi import FastAPI, HTTPException
+# pylint: disable=missing-docstring
 from contextlib import asynccontextmanager
+from typing import List
+from fastapi import FastAPI, HTTPException
 from app import database as app_database
 from app import crud as app_crud
-import app.crud
 from app.models import Movie
-from typing import List
 # from typing import List, Union
 # from fastapi import Uvicorn
 
@@ -39,5 +39,4 @@ async def get_movie_endpoint(movie_id: str):
 @app.get("/movies", response_model=List[Movie])
 async def list_movies_endpoint():
     movies = await app_crud.list_movies(app_database.movies_collection)
-    return movies   
-
+    return movies

@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+# pylint: disable=missing-docstring
 from typing import List, Optional
+from pydantic import BaseModel
 
 class Movie(BaseModel):
     # TMDb Movie ID
-    id: str  
+    id: str
     title: str
     genre: List[str]
     year: Optional[int] = None
