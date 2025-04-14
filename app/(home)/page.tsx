@@ -5,17 +5,26 @@ import { MostPopular } from "@/components/home/mostPopular";
 import { MoreToExplore } from "@/components/home/moreToExplore";
 import { Bookmark } from "lucide-react";
 
-import { getTopRatedMovies } from "@/lib/tmdb";
+import { getTopRatedMovies, getGenresList, getPopularMovies } from "@/lib/tmdb";
 
-export default function Home() {
-  const topRatedMovies = getTopRatedMovies();
+export default async function Home() {
+  const topRatedMoviesPromise = getTopRatedMovies();
+  const genresListPromise = getGenresList();
+  const popularMoviesPromise = getPopularMovies();
+
+  const [genresList, popularMovies] = await Promise.all([
+    genresListPromise,
+    popularMoviesPromise,
+  ]);
+
+  const initialMoreToExploreMovies = popularMovies.slice(5, 17);
 
   return (
     <div className="flex flex-col gap-12">
       <div>
         <h1>AI Recommendation for you</h1>
         <Suspense fallback={<div>Loading...</div>}>
-          <Recomendations movies={topRatedMovies} />
+          <Recomendations movies={topRatedMoviesPromise} />
         </Suspense>
       </div>
       <div>
@@ -35,7 +44,10 @@ export default function Home() {
       </div>
       <div>
         <h1>More to explore</h1>
-        <MoreToExplore />
+        <MoreToExplore
+          initialGenres={genresList}
+          initialMovies={initialMoreToExploreMovies}
+        />
       </div>
     </div>
   );

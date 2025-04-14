@@ -34,4 +34,13 @@ const getGenresList = async () => {
   return data.genres;
 };
 
-export { getPopularMovies, getTopRatedMovies, getGenresList };
+const getMoviesByGenre = async (genre: string) => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genre}`,
+    options
+  );
+  const data = await response.json();
+  return data.results;
+};
+
+export { getPopularMovies, getTopRatedMovies, getGenresList, getMoviesByGenre };
