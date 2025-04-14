@@ -43,4 +43,39 @@ const getMoviesByGenre = async (genre: string) => {
   return data.results;
 };
 
-export { getPopularMovies, getTopRatedMovies, getGenresList, getMoviesByGenre };
+const getTrendingMovies = async () => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/trending/movie/day?language=en-US'`,
+    options
+  );
+  const data = await response.json();
+  return data.results;
+};
+
+const getSearchResultsByMovie = async (query: string) => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
+    options
+  );
+  const data = await response.json();
+  return data.results;
+};
+
+const getSearchResultsByPerson = async (query: string) => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/search/person?query=${query}&include_adult=false&language=en-US&page=1`,
+    options
+  );
+  const data = await response.json();
+  return data.results;
+};
+
+export {
+  getPopularMovies,
+  getTopRatedMovies,
+  getGenresList,
+  getMoviesByGenre,
+  getTrendingMovies,
+  getSearchResultsByMovie,
+  getSearchResultsByPerson,
+};
