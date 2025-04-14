@@ -25,4 +25,13 @@ const getTopRatedMovies = async () => {
   return data.results;
 };
 
-export { getPopularMovies, getTopRatedMovies };
+const getGenresList = async () => {
+  const response = await fetch(
+    "https://api.themoviedb.org/3/genre/movie/list?language=en",
+    options
+  );
+  const data = await response.json();
+  return data.genres;
+};
+
+export { getPopularMovies, getTopRatedMovies, getGenresList };

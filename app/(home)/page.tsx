@@ -7,7 +7,7 @@ import { Bookmark } from "lucide-react";
 
 import { getTopRatedMovies } from "@/lib/tmdb";
 
-export default async function Home() {
+export default function Home() {
   const topRatedMovies = getTopRatedMovies();
 
   return (
