@@ -1,14 +1,18 @@
 import { MovieCard } from "@/components/home/movieCard";
+import { getPopularMovies } from "@/lib/tmdb";
 
-export function MostPopular() {
+export async function MostPopular() {
+  const allPopularMovies = await getPopularMovies();
+  const popularMovies = allPopularMovies.slice(0, 5);
+
   return (
     <div className="grid grid-cols-5 gap-[20px] w-full mt-6">
-      {Array.from({ length: 5 }).map((_, index) => (
+      {popularMovies.map((movie) => (
         <MovieCard
-          key={index}
-          title="12 Angry Men"
-          rating={9.0}
-          image="/movie_poster/12_Angry_Men.png"
+          key={movie.id}
+          title={movie.title}
+          rating={movie.vote_average}
+          image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
         />
       ))}
     </div>

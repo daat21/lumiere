@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-
+import { use } from "react";
 import { MovieCard } from "@/components/home/movieCard";
 import {
   Carousel,
@@ -12,7 +12,16 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
-export function Recomendations() {
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  vote_average: number;
+}
+
+export function Recomendations({ movies }: { movies: Promise<Movie[]> }) {
+  const topRatedMovies = use(movies).slice(0, 10);
+
   return (
     <Carousel
       plugins={[
@@ -27,13 +36,13 @@ export function Recomendations() {
       className="w-full mt-6"
     >
       <CarouselContent>
-        {Array.from({ length: 10 }).map((_, index) => (
-          <CarouselItem key={index} className="basis-1/5">
+        {topRatedMovies.map((movie: Movie) => (
+          <CarouselItem key={movie.id} className="basis-1/5">
             <div className="p-1">
               <MovieCard
-                title="The Lord of the Rings: The Fellowship of the Ring"
-                rating={8.9}
-                image="/movie_poster/The_Lord_of_the_Rings.png"
+                title={movie.title}
+                rating={movie.vote_average}
+                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               />
             </div>
           </CarouselItem>

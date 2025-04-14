@@ -31,8 +31,8 @@ export function MovieCard({
               <Bookmark className="w-5 h-5 text-green-500 group-hover:text-green-500 group-hover:fill-green-500" />
             </button>
           </div>
-          <div className="mt-4">
-            <p className="text-sm font-bold">{title}</p>
+          <div className="mt-4 mx-2">
+            <p className="text-base font-bold">{title}</p>
           </div>
         </div>
       </CardContent>
