@@ -23,7 +23,7 @@ export function MovieCard({
         />
         <div className="p-2">
           <div className="flex justify-between items-center mt-1">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center p-1 ml-1/2 gap-1">
               <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
               <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
             </div>
@@ -31,7 +31,7 @@ export function MovieCard({
               <Bookmark className="w-5 h-5 text-green-500 group-hover:text-green-500 group-hover:fill-green-500" />
             </button>
           </div>
-          <div className="mt-4 mx-2">
+          <div className="mt-4 mx-2 text-center">
             <p className="text-base font-bold">{title}</p>
           </div>
         </div>

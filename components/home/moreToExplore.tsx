@@ -63,7 +63,7 @@ export function MoreToExplore({
             variant="outline"
             key={genre.id}
             className={`
-              rounded-2xl text-base font-normal cursor-pointer 
+              rounded-2xl text-base font-normal cursor-pointer px-3 py-1
               transition-colors duration-200 ease-in-out 
               ${
                 selectedGenreId === genre.id

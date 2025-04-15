@@ -148,6 +148,7 @@ export function SearchBar() {
                         key={`trending-${movie.id}`}
                         className="px-3 py-2 text-sm hover:bg-accent cursor-pointer"
                       >
+                        <Clapperboard className="h-4 w-4 inline mr-2 opacity-50" />
                         {movie.title}
                       </li>
                     ))}
@@ -163,14 +164,18 @@ export function SearchBar() {
             <ul>
               <li className="px-3 py-2 text-sm hover:bg-accent cursor-pointer">
                 <Clapperboard className="h-4 w-4 inline mr-2" />
-                {getFirstMovieSuggestion()}{" "}
+                <span className="font-bold">
+                  {getFirstMovieSuggestion()}
+                </span>{" "}
                 <span className="text-muted-foreground font-bold">
                   in movies
                 </span>
               </li>
               <li className="px-3 py-2 text-sm hover:bg-accent cursor-pointer">
                 <UsersRound className="h-4 w-4 inline mr-2" />
-                {getFirstPersonSuggestion()}{" "}
+                <span className="font-bold">
+                  {getFirstPersonSuggestion()}
+                </span>{" "}
                 <span className="text-muted-foreground font-bold">
                   in people
                 </span>
