@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { GalleryVerticalEnd } from "lucide-react";
-import { LoginForm } from "@/components/login-form";
+import Link from 'next/link'
+import { GalleryVerticalEnd } from 'lucide-react'
+import { LoginForm } from '@/components/login-form'
 
 export default function LoginPage() {
   return (
@@ -13,10 +13,10 @@ export default function LoginPage() {
           <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md">
             <GalleryVerticalEnd className="size-6" />
           </div>
-          <span className="font-bold text-2xl">Lumiere</span>
+          <span className="text-2xl font-bold">Lumiere</span>
         </Link>
         <LoginForm />
       </div>
     </div>
-  );
+  )
 }

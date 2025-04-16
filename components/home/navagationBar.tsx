@@ -1,27 +1,27 @@
-import Link from "next/link";
-import { Button } from "../ui/button";
-import { ModeToggle } from "@/components/darkmode";
-import { DropdownMenuComponent } from "./dropdownMenu";
-import { BookmarkIcon } from "@heroicons/react/24/outline";
-import { SearchBar } from "./searchBar";
+import Link from 'next/link'
+import { Button } from '../ui/button'
+import { ModeToggle } from '@/components/darkmode'
+import { DropdownMenuComponent } from './dropdownMenu'
+import { BookmarkIcon } from '@heroicons/react/24/outline'
+import { SearchBar } from './searchBar'
 export function NavigationBar() {
   return (
     <nav className="flex items-center justify-between p-5 px-10">
       <div className="flex items-center gap-4">
         <DropdownMenuComponent />
         <Link href="/">
-          <span className="font-bold text-2xl">Lumiere</span>
+          <span className="text-2xl font-bold">Lumiere</span>
         </Link>
       </div>
-      <div className="relative w-1/3 ml-40">
+      <div className="relative ml-40 w-1/3">
         <SearchBar />
       </div>
       <div className="flex items-center gap-2">
         <Link
           href="/watchlist"
-          className="group flex items-center gap-1 w-40 flex-1"
+          className="group flex w-40 flex-1 items-center gap-1"
         >
-          <BookmarkIcon className="h-6 w-6 text-foreground group-hover:fill-foreground" />
+          <BookmarkIcon className="text-foreground group-hover:fill-foreground h-6 w-6" />
           <span className="font-semibold">Watchlist</span>
         </Link>
         <Button asChild variant="outline">
@@ -37,5 +37,5 @@ export function NavigationBar() {
         <ModeToggle />
       </div>
     </nav>
-  );
+  )
 }

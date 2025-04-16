@@ -1,3 +1,3 @@
 export default function MovieDesc() {
-  return <div>MovieDesc</div>;
+  return <div>MovieDesc</div>
 }

@@ -1,76 +1,72 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { MovieHorizontalCard } from "@/components/home/movieCard";
-import { getMoviesByGenre } from "@/lib/tmdb";
-import { MovieHorizontalCardSkeleton } from "../ui/skeleton/MovieHorizontalCardSkeleton";
+import { useState } from 'react'
+import { Badge } from '@/components/ui/badge'
+import { MovieBackdropCard } from '@/components/home/movieCard'
+import { getMoviesByGenre } from '@/lib/tmdb'
+import { MovieBackdropCardSkeleton } from '../ui/skeleton/MovieBackdropCardSkeleton'
 
 interface Genre {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 interface Movie {
-  id: number;
-  title: string;
-  backdrop_path: string | null;
+  id: number
+  title: string
+  backdrop_path: string | null
 }
 
 export function MoreToExplore({
   initialGenres,
   initialMovies,
 }: {
-  initialGenres: Genre[];
-  initialMovies: Movie[];
+  initialGenres: Genre[]
+  initialMovies: Movie[]
 }) {
-  const [genres] = useState<Genre[]>(initialGenres);
-  const [movies, setMovies] = useState<Movie[]>(initialMovies);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedGenreId, setSelectedGenreId] = useState<number | null>(null);
+  const [genres] = useState<Genre[]>(initialGenres)
+  const [movies, setMovies] = useState<Movie[]>(initialMovies)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedGenreId, setSelectedGenreId] = useState<number | null>(null)
 
   const handleGenreClick = async (genreId: number) => {
     if (genreId === selectedGenreId) {
-      setSelectedGenreId(null);
-      setMovies(initialMovies);
-      setError(null);
-      setIsLoading(false);
-      return;
+      setSelectedGenreId(null)
+      setMovies(initialMovies)
+      setError(null)
+      setIsLoading(false)
+      return
     }
 
-    setSelectedGenreId(genreId);
-    setIsLoading(true);
-    setError(null);
+    setSelectedGenreId(genreId)
+    setIsLoading(true)
+    setError(null)
 
     try {
-      const fetchedMovies = await getMoviesByGenre(String(genreId));
-      setMovies(fetchedMovies.slice(0, 12));
+      const fetchedMovies = await getMoviesByGenre(String(genreId))
+      setMovies(fetchedMovies.slice(0, 12))
     } catch (err) {
-      console.error("Failed to fetch movies by genre:", err);
-      setError("Failed to load movies for this genre.");
-      setMovies(initialMovies);
+      console.error('Failed to fetch movies by genre:', err)
+      setError('Failed to load movies for this genre.')
+      setMovies(initialMovies)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="mt-6 mx-4">
+    <div className="mx-4 mt-6">
       <div className="flex flex-wrap gap-4">
-        {genres.map((genre) => (
+        {genres.map(genre => (
           <Badge
             variant="outline"
             key={genre.id}
-            className={`
-              rounded-2xl text-base font-normal cursor-pointer px-3 py-1
-              transition-colors duration-200 ease-in-out 
-              ${
-                selectedGenreId === genre.id
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              }
-            `}
+            className={`cursor-pointer rounded-2xl px-3 py-1 text-base font-normal transition-colors duration-200 ease-in-out ${
+              selectedGenreId === genre.id
+                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                : 'border-primary text-primary hover:bg-primary hover:text-primary-foreground border'
+            } `}
             onClick={() => handleGenreClick(genre.id)}
           >
             {genre.name}
@@ -79,33 +75,33 @@ export function MoreToExplore({
       </div>
 
       {isLoading && (
-        <div className="grid grid-cols-3 mt-4">
+        <div className="mt-4 grid grid-cols-3 justify-items-center">
           {Array.from({ length: 12 }).map((_, index) => (
-            <div key={index} className="ml-4 mt-8">
-              <MovieHorizontalCardSkeleton />
+            <div key={index} className="mx-2 my-4">
+              <MovieBackdropCardSkeleton />
             </div>
           ))}
         </div>
       )}
-      {error && <div className="text-center mt-8 text-red-500">{error}</div>}
+      {error && <div className="mt-8 text-center text-red-500">{error}</div>}
 
       {!isLoading && !error && (
-        <div className="grid grid-cols-3 mt-4">
-          {movies.map((movie) => (
-            <div key={movie.id} className="ml-4 mt-8">
-              <MovieHorizontalCard
+        <div className="mt-4 grid grid-cols-3 justify-items-center">
+          {movies.map(movie => (
+            <div key={movie.id} className="mx-2 my-5">
+              <MovieBackdropCard
                 title={movie.title}
                 image={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
               />
             </div>
           ))}
           {movies.length === 0 && (
-            <div className="col-span-3 text-center mt-8">
+            <div className="col-span-3 mt-8 text-center">
               No movies found for this genre.
             </div>
           )}
         </div>
       )}
     </div>
-  );
+  )
 }
