@@ -24,7 +24,6 @@ Python 3.9.6
 
 ### 3.Create a virtual environment
 python3 -m venv .venv
-pip install -r requirements.txt
 
 ### 4.Activate virtual environment
 #### For Windows:
@@ -44,16 +43,15 @@ brew services start mongodb-community@7.0
 ### If MongoDB is not installed, install:
 brew install mongodb-community@7.0
 
-## To run FastAPI Back end
+## To run FastAPI Backend
 ### For Windows and MacOS:
-fastapi dev ./app/main.py
+python -m uvicorn movie_platform.main:movie_app --reload
 
 for accessing the Server and API docs, refer to the links within the returned text in the terminal after running the above command in the format : 
 │  Serving at: http://127.0.0.1:8000                  │
 │                                                     │
 │  API docs: http://127.0.0.1:8000/docs               │
 
-Windows (CTRL+Click) MacOS (CMD+Click) 
 
 ## To stop FastAPI Back end
 ### For Windows and MacOS:
