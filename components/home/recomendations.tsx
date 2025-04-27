@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { SparklesIcon } from '@heroicons/react/24/outline'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ChatInput } from '@/components/home/chatInput'
-import { MovieHorizontalCard } from '@/components/home/movieCard'
+import { ChatInput } from '@/components/home/ChatInput'
+import { MovieHorizontalCard } from '@/components/home/MovieCard'
 import { getTopRatedMovies } from '@/lib/tmdb'
 import { use } from 'react'
 
