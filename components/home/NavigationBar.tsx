@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { ModeToggle } from '@/components/darkmode'
-import { DropdownMenuComponent } from './dropdownMenu'
+import { DropdownMenuComponent } from './DropDownMenu'
 import { BookmarkIcon } from '@heroicons/react/24/outline'
-import { SearchBar } from './searchBar'
+import { SearchBar } from './SearchBar'
 export function NavigationBar() {
   return (
     <nav className="flex items-center justify-between p-5 px-10">

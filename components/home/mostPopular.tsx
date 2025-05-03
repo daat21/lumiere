@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { use } from 'react'
-import { MovieCard } from '@/components/home/movieCard'
+import { MovieCard } from '@/components/home/MovieCard'
 import {
   Carousel,
   CarouselContent,
