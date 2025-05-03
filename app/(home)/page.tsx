@@ -1,10 +1,9 @@
 import { Suspense } from 'react'
-
-import { Recomendations } from '@/components/home/recomendations'
-import { MostPopular } from '@/components/home/mostPopular'
-import { MoreToExplore } from '@/components/home/moreToExplore'
+import { Recomendations } from '@/components/home/Recomendations'
+import { MostPopular } from '@/components/home/MostPopular'
+import { MoreToExplore } from '@/components/home/MoreToExplore'
 import { Bookmark } from 'lucide-react'
-
+import { ChatBox } from '@/components/home/ChatBox/ChatBox'
 import { getGenresList, getPopularMovies } from '@/lib/tmdb'
 
 export default async function Home() {
@@ -22,8 +21,8 @@ export default async function Home() {
     <div className="flex flex-col gap-12">
       <div>
         <Suspense fallback={<div>Loading...</div>}>
-          {/* <Recomendations movies={topRatedMoviesPromise} /> */}
-          <Recomendations />
+          {/* <Recomendations /> */}
+          <ChatBox />
         </Suspense>
       </div>
       <div>

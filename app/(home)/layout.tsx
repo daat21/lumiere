@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { NavigationBar } from '@/components/home/navagationBar'
-import { Footer } from '@/components/home/footer'
+import { NavigationBar } from '@/components/home/NavagationBar'
+import { Footer } from '@/components/home/Footer'
 import { Button } from '@/components/ui/button'
 import { ArrowUp } from 'lucide-react'
 

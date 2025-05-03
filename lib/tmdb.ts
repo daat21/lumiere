@@ -1,11 +1,12 @@
 'use server'
 
+const API_KEY = process.env.TMDB_API_LONG_KEY
+
 const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMjdiMzg4OTE2MTlmZjU1ZDI2ZGVlOGU3YzdjMzdkZSIsIm5iZiI6MTc0NDY0Mzk5MS43NzYsInN1YiI6IjY3ZmQyNzk3OWQxZjc3OGFiODk5MjQzMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YnPuMLP2YBt27UTSEdpLkanVqANnv-B0Mc-BhCHEHL0',
+    Authorization: `Bearer ${API_KEY}`,
   },
 }
 

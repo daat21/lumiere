@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
-import { MovieBackdropCard } from '@/components/home/movieCard'
+import { MovieBackdropCard } from '@/components/home/MovieCard'
 import { getMoviesByGenre } from '@/lib/tmdb'
 import { MovieBackdropCardSkeleton } from '../ui/skeleton/MovieBackdropCardSkeleton'
 
