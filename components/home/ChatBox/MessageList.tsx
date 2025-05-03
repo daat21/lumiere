@@ -16,7 +16,7 @@ interface MovieResult {
 interface MessageListProps {
   messages: Message[]
   movieSearches: Map<string, MovieResult | null>
-  loadingMovies: Set<string>
+  // loadingMovies: Set<string>
   initialRecommendation: ReactNode | null
   isLoadingInitial: boolean
 }
@@ -26,7 +26,6 @@ const MOVIE_SEARCH_REGEX = /\[MOVIE_SEARCH:(.*?)\]/g
 export function MessageList({
   messages,
   movieSearches,
-  loadingMovies,
   initialRecommendation,
   isLoadingInitial,
 }: MessageListProps) {
