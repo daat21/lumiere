@@ -16,7 +16,7 @@ interface MovieResult {
 interface MessageListProps {
   messages: Message[]
   movieSearches: Map<string, MovieResult | null>
-  loadingMovies: Set<string>
+  // loadingMovies: Set<string>
   initialRecommendation: ReactNode | null
   isLoadingInitial: boolean
 }
@@ -26,7 +26,7 @@ const MOVIE_SEARCH_REGEX = /\[MOVIE_SEARCH:(.*?)\]/g
 export function MessageList({
   messages,
   movieSearches,
-  loadingMovies,
+  // loadingMovies,
   initialRecommendation,
   isLoadingInitial,
 }: MessageListProps) {
@@ -64,12 +64,13 @@ export function MessageList({
             key={movie.id}
             title={movie.title}
             original_title={movie.original_title}
-            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            image={movie.poster_path}
             release_date={movie.release_date}
             overview={
-              movie.overview.length > 280
-                ? movie.overview.slice(0, 280) + '...'
-                : movie.overview
+              // movie.overview.length > 280
+              //   ? movie.overview.slice(0, 280) + '...'
+              //   : movie.overview
+              movie.overview
             }
             className="bg-sidebar"
           />

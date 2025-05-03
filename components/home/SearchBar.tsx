@@ -11,6 +11,7 @@ import {
   getSearchResultsByPerson,
 } from '@/lib/tmdb'
 import { useDebouncedCallback } from 'use-debounce'
+import { useRouter } from 'next/navigation'
 
 interface Movie {
   id: number
@@ -30,6 +31,7 @@ export function SearchBar() {
   const [personResults, setPersonResults] = useState<Person[]>([])
   const [isLoadingTrending, setIsLoadingTrending] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     if (isDropdownOpen && query === '' && trendingMovies.length === 0) {
@@ -104,6 +106,15 @@ export function SearchBar() {
     fetchSearchResults(newQuery)
   }
 
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    router.push(`/search?query=${query}&type=movie`)
+  }
+
+  const handleSearchClick = (content: string, type?: string) => {
+    router.push(`/search?query=${content}&type=${type}`)
+  }
+
   const getFirstMovieSuggestion = () => {
     return movieResults.length > 0 ? movieResults[0].title : query
   }
@@ -115,16 +126,18 @@ export function SearchBar() {
   return (
     <div className="relative">
       <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 left-3 z-10 h-5 w-5 -translate-y-1/2" />
-      <Input
-        placeholder="Search movies, actors..."
-        className="pl-10 focus:rounded-b-none focus:border-3 focus-visible:ring-0"
-        value={query}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        aria-haspopup="listbox"
-        aria-expanded={isDropdownOpen}
-      />
+      <form onSubmit={handleSearch}>
+        <Input
+          placeholder="Search movies, actors..."
+          className="pl-10 focus:rounded-b-none focus:border-3 focus-visible:ring-0"
+          value={query}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          aria-haspopup="listbox"
+          aria-expanded={isDropdownOpen}
+        />
+      </form>
       {isDropdownOpen && (
         <div
           className="bg-popover border-input absolute top-full right-0 left-0 z-20 mt-0 w-full overflow-hidden overflow-y-auto rounded-md rounded-t-none border shadow-lg"
@@ -147,6 +160,9 @@ export function SearchBar() {
                       <li
                         key={`trending-${movie.id}`}
                         className="hover:bg-accent cursor-pointer px-3 py-2 text-sm"
+                        onMouseDown={() =>
+                          handleSearchClick(movie.title, 'movie')
+                        }
                       >
                         <Clapperboard className="mr-2 inline h-4 w-4 opacity-50" />
                         {movie.title}
@@ -162,7 +178,12 @@ export function SearchBar() {
             </div>
           ) : (
             <ul>
-              <li className="hover:bg-accent cursor-pointer px-3 py-2 text-sm">
+              <li
+                className="hover:bg-accent cursor-pointer px-3 py-2 text-sm"
+                onMouseDown={() =>
+                  handleSearchClick(getFirstMovieSuggestion(), 'movie')
+                }
+              >
                 <Clapperboard className="mr-2 inline h-4 w-4" />
                 <span className="font-bold">
                   {getFirstMovieSuggestion()}
@@ -171,7 +192,12 @@ export function SearchBar() {
                   in movies
                 </span>
               </li>
-              <li className="hover:bg-accent cursor-pointer px-3 py-2 text-sm">
+              <li
+                className="hover:bg-accent cursor-pointer px-3 py-2 text-sm"
+                onMouseDown={() =>
+                  handleSearchClick(getFirstPersonSuggestion(), 'people')
+                }
+              >
                 <UsersRound className="mr-2 inline h-4 w-4" />
                 <span className="font-bold">
                   {getFirstPersonSuggestion()}
@@ -190,6 +216,7 @@ export function SearchBar() {
                   <li
                     key={`movie-${movie.id}`}
                     className="hover:bg-accent cursor-pointer px-3 py-2 text-sm"
+                    onMouseDown={() => handleSearchClick(movie.title, 'movie')}
                   >
                     <Clapperboard className="mr-2 inline h-4 w-4 opacity-50" />
                     {movie.title}

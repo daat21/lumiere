@@ -25,7 +25,7 @@ export function InitialRecommendation({ movies }: InitialRecommendationProps) {
             <MovieHorizontalCard
               title={movie.title}
               original_title={movie.original_title}
-              image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              image={movie.poster_path}
               release_date={movie.release_date}
               overview={
                 movie.overview.length > 280
