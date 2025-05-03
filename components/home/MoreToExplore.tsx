@@ -91,7 +91,7 @@ export function MoreToExplore({
             <div key={movie.id} className="mx-2 my-5">
               <MovieBackdropCard
                 title={movie.title}
-                image={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+                image={movie.backdrop_path}
               />
             </div>
           ))}

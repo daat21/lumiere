@@ -10,18 +10,22 @@ export function MovieCard({
 }: {
   title: string
   rating: number
-  image: string
+  image: string | null
 }) {
   return (
     <Card className="h-[420px] w-[200px] overflow-hidden rounded-lg py-0 shadow-lg">
       <CardContent className="p-0">
-        <Image
-          src={image}
-          alt={title}
-          width={200}
-          height={300}
-          className="object-cover"
-        />
+        {image ? (
+          <Image
+            src={`https://image.tmdb.org/t/p/w500${image}`}
+            alt={title}
+            width={200}
+            height={300}
+            className="object-cover"
+          />
+        ) : (
+          <div className="h-[300px] w-[200px] bg-gray-200" />
+        )}
         <div className="p-2">
           <div className="mt-1 flex items-center justify-between">
             <div className="ml-1/2 flex items-center gap-1 p-1">
@@ -46,18 +50,22 @@ export function MovieBackdropCard({
   image,
 }: {
   title: string
-  image: string
+  image: string | null
 }) {
   return (
     <Card className="h-[240px] w-[340px] overflow-hidden rounded-lg py-0 shadow-lg">
       <CardContent className="p-0">
-        <Image
-          src={image}
-          alt={title}
-          width={340}
-          height={200}
-          className="object-cover"
-        />
+        {image ? (
+          <Image
+            src={`https://image.tmdb.org/t/p/w500${image}`}
+            alt={title}
+            width={340}
+            height={200}
+            className="object-cover"
+          />
+        ) : (
+          <div className="h-[200px] w-[340px] bg-gray-200" />
+        )}
         <div className="p-2">
           <div className="mt-0">
             <p className="text-base font-bold">{title}</p>
@@ -77,7 +85,7 @@ export function MovieHorizontalCard({
   className,
 }: {
   title: string
-  image: string
+  image: string | null
   release_date: string
   overview: string
   original_title: string
@@ -86,13 +94,17 @@ export function MovieHorizontalCard({
   return (
     <Card className="h-[141px] overflow-hidden rounded-lg py-0 shadow-lg">
       <CardContent className={cn('flex items-center gap-4 p-0', className)}>
-        <Image
-          src={image}
-          alt={title}
-          width={94}
-          height={141}
-          className="h-[141px] w-[94px] object-cover"
-        />
+        {image ? (
+          <Image
+            src={`https://image.tmdb.org/t/p/w500${image}`}
+            alt={title}
+            width={94}
+            height={141}
+            className="h-[141px] w-[94px] object-cover"
+          />
+        ) : (
+          <div className="h-[141px] min-w-[94px] bg-gray-200" />
+        )}
         <div className="flex flex-col gap-2">
           <h3>
             <span className="text-lg font-bold">{title}</span>
@@ -102,8 +114,8 @@ export function MovieHorizontalCard({
           </h3>
           <p className="text-muted-foreground text-sm">{release_date}</p>
           <p className="text-sm">
-            {/* {overview.length > 300 ? overview.slice(0, 280) + "..." : overview} */}
-            {overview}
+            {overview.length > 200 ? overview.slice(0, 200) + '...' : overview}
+            {/* {overview} */}
           </p>
         </div>
       </CardContent>

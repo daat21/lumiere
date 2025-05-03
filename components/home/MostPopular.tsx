@@ -42,7 +42,7 @@ export function MostPopular({ movies }: { movies: Promise<Movie[]> }) {
               <MovieCard
                 title={movie.title}
                 rating={movie.vote_average}
-                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                image={movie.poster_path}
               />
             </div>
           </CarouselItem>

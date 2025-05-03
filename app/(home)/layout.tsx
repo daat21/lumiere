@@ -39,7 +39,9 @@ export default function HomeLayout({
   return (
     <>
       <NavigationBar />
-      <main className="container mx-auto px-4 py-8">{children}</main>
+      <main className="container mx-auto min-h-[calc(100vh-190px)] px-4 py-8">
+        {children}
+      </main>
       <Footer />
 
       <Button
