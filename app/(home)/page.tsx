@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import { Recomendations } from '@/components/home/Recomendations'
 import { MostPopular } from '@/components/home/MostPopular'
 import { MoreToExplore } from '@/components/home/MoreToExplore'
 import { Bookmark } from 'lucide-react'
