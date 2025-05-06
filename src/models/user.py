@@ -12,7 +12,8 @@ class UserCreate(BaseModel):
     def username_validator(cls, v):
         # Ensure username contains at least one letter and alphanumeric
         if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$', v):
-            raise ValueError('Username must contain at least one letter and alphanumeric, and be at least 6 characters long') 
+            raise ValueError(
+                'Username must contain at least one letter and alphanumeric, and be at least 6 characters long')
 
 
 class UserLogin(BaseModel):
