@@ -28,3 +28,7 @@ async def login_user(user: UserLogin):
         raise HTTPException(
             status_code=401, detail="Incorrect username or password")
     return {"access_token": "fake-jwt-token", "token_type": "bearer"}
+
+# @router.get("/{username}")
+# async def get_current_user():
+    
