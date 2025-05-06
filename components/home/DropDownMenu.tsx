@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Bars3Icon } from '@heroicons/react/24/outline'
-import { House, Bookmark, User, Settings } from 'lucide-react'
+import { House, Binoculars, Bookmark, User, Settings } from 'lucide-react'
 
 export function DropdownMenuComponent() {
   return (
@@ -19,6 +19,12 @@ export function DropdownMenuComponent() {
           <DropdownMenuItem>
             <House className="h-6 w-6" />
             <span className="text-lg font-bold">Home</span>
+          </DropdownMenuItem>
+        </Link>
+        <Link href="/discover">
+          <DropdownMenuItem>
+            <Binoculars className="h-6 w-6" />
+            <span className="text-lg font-bold">Discover</span>
           </DropdownMenuItem>
         </Link>
         <Link href="/watchlist">
