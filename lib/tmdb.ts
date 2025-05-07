@@ -19,9 +19,9 @@ const getPopularMovies = async () => {
   return data.results
 }
 
-const getTopRatedMovies = async () => {
+const getTopRatedMovies = async (page?: number) => {
   const response = await fetch(
-    'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
+    `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=${page || 1}`,
     options
   )
   const data = await response.json()
