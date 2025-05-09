@@ -38,7 +38,7 @@ function Slider({
   }, [min, max, step, tickCount, showTicks])
 
   return (
-    <div className="flex w-full flex-col">
+    <>
       <SliderPrimitive.Root
         data-slot="slider"
         defaultValue={defaultValue}
@@ -89,7 +89,7 @@ function Slider({
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
 
