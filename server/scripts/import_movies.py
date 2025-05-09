@@ -3,8 +3,8 @@ import os
 import asyncio
 import httpx
 from dotenv import load_dotenv
-from movie_platform.models import Movie, Review
-from movie_platform import database
+from server.models import Movie, Review
+from server import database
 
 # ----------------- Configure the zone -----------------
 # Load .env file

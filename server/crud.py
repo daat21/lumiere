@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring
 from typing import List, Optional
-from movie_platform.models import Movie
+from server.models import Movie
 
 
 async def get_movie_by_id(movies_collection, movie_id: str) -> Optional[Movie]:

@@ -2,9 +2,9 @@
 from contextlib import asynccontextmanager
 from typing import List
 from fastapi import FastAPI, HTTPException
-from movie_platform.database import mongo
-from movie_platform import crud as app_crud
-from movie_platform.models import Movie
+from server.database import mongo
+from server import crud as app_crud
+from server.models import Movie
 
 
 # Define Lifespan event
