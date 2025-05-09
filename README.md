@@ -2,6 +2,7 @@
 ### Client Side
 First, set up the environment variables,
 ```bash
+cd client
 cat <<EOL > .env.local
 GOOGLE_GENERATIVE_AI_API_KEY=***
 TMDB_API_KEY=***
@@ -10,7 +11,6 @@ EOL
 ```
 Then, install dependency and run developemnt enviroment,
 ```bash
-cd client
 npm install
 npm run dev
 ```
