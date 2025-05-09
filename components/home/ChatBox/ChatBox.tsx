@@ -46,14 +46,15 @@ export function ChatBox() {
         </CardHeader>
         <CardContent className="mb-4 flex flex-col gap-4">
           <MovieSearchProvider messages={messages}>
-            {({ movieSearches, loadingMovies }) => (
+            {/* {({ movieSearches, loadingMovies }) => ( */}
+            {({ movieSearches }) => (
               <InitialRecommendationProvider messages={messages}>
                 {({ initialRecommendation, isLoadingInitial }) => (
                   <ScrollableArea>
                     <MessageList
                       messages={messages}
                       movieSearches={movieSearches}
-                      loadingMovies={loadingMovies}
+                      // loadingMovies={loadingMovies}
                       initialRecommendation={initialRecommendation}
                       isLoadingInitial={isLoadingInitial}
                     />
