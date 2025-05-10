@@ -1,181 +1,240 @@
-from bson import ObjectId
-from src.database.mongodb import mongo
-from src.models.review import ReviewCreate, Review
-from fastapi import HTTPException
+import logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from fastapi import HTTPException, status
+
+from src.database.repositories.review import ReviewRepository
+from src.models import Review, ReviewCreate, ReviewUpdate
+from src.services.tmdb_service import TMDBService
+from src.utils.exceptions import (ResourceNotFoundError, UnauthorizedError,
+                                  ValidationError)
+
+logger = logging.getLogger(__name__)
 
 
 class ReviewService:
-    async def create_review(self, movie_id: str, user_id: str, review_data: ReviewCreate) -> Review:
-        """
-        Create a new review for a movie.
-        """
-        # Check a new review for a movie.
-        movie = await mongo.movies_collection.find_one({"_id": ObjectId(movie_id)})
-        if not movie:
-            raise HTTPException(
-                status_code=404, detail=f"Movie with id {movie_id} not found")
+    """Service for review-related operations"""
 
-        # Create a new review
-        review_dict = {
-            "movie_id": movie_id,
-            "user_id": user_id,
-            "rating": review_data.rating,
-            "comment": review_data.comment
-        }
+    def __init__(self):
+        self.review_repository = ReviewRepository()
+        self.tmdb_service = TMDBService()
 
-        # Insert into database
-        result = await mongo.reviews_collection.insert_one(review_dict)
-
-        # Return created review
-        return Review(
-            id=str(result.inserted_id),
-            movie_id=movie_id,
-            user_id=user_id,
-            rating=review_data.rating,
-            comment=review_data.comment
-        )
-
-    async def get_reviews(self, movie_id: str, skip: int = 0, limit: int = 10):
-        """
-        Get reviews for a specific movie with pagination.
-        """
-        # Check if movie exists
-        movie = await mongo.movies_collection.find_one({"_id": ObjectId(movie_id)})
-        if not movie:
-            raise HTTPException(
-                status_code=404, detail=f"Movie with id {movie_id} not found")
-
-        # Get reviews for database
-        cursor = mongo.reviews_collection.find(
-            {"movie_id": movie_id}).skip(skip).limit(limit)
-        reviews = []
-
-        async for review in cursor:
-            reviews.append(Review(
-                id=str(review["_id"]),
-                movie_id=review["movie_id"],
-                user_id=review["user_id"],
-                rating=review["rating"],
-                comment=review["comment"]
-            ))
-
-        return reviews
-
-    async def get_average_rating(self, movie_id: str):
-        """
-        Get the average rating for a specific movie.
-        """
+    async def create_review(self, movie_id: str, user_id: str, username: str, review: ReviewCreate) -> Dict[str, Any]:
+        """Create a new review"""
         try:
-            # Check if movie exists
-            movie = await mongo.movies_collection.find_one({"_id": ObjectId(movie_id)})
-            if not movie:
-                raise HTTPException(
-                    status_code=404, detail=f"Movie with id {movie_id} not found")
-            # Get reviews for database
-            cursor = await mongo.reviews_collection.find({"movie_id": movie_id}).to_list(None)
+            # Validate movie_id format
+            if not movie_id.isdigit():
+                raise ValidationError("Invalid movie ID format")
 
-            # If no reviews, return 0 as average rating
-            if not cursor:
-                return {
-                    "movie_id": movie_id,
-                    "average_rating": 0.0,
-                    "total_reviews": 0
-                }
+            # Check if user already reviewed this movie
+            existing_review = await self.get_user_review_for_movie(user_id, movie_id)
+            if existing_review:
+                raise ValidationError("User has already reviewed this movie")
 
-            # Calculate average rating
-            total_rating = sum(review["rating"] for review in cursor)
-            average_rating = total_rating / len(cursor)
-            return {
+            # Create review data
+            review_data = review.model_dump()
+            review_data.update({
                 "movie_id": movie_id,
-                "average_rating": round(average_rating, 2),
-                "total_reviews": len(cursor)
+                "user_id": user_id,
+                "username": username,
+                "created_at": datetime.now(),
+                "updated_at": None
+            })
+
+            return await self.review_repository.create(review_data)
+        except ValidationError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error creating review: {str(e)}"
+            )
+
+    async def get_review(self, review_id: str) -> Optional[Dict[str, Any]]:
+        """Get a review by ID"""
+        try:
+            review = await self.review_repository.get_by_id(review_id)
+            if not review:
+                raise ResourceNotFoundError("Review not found")
+            return review
+        except ResourceNotFoundError as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(e)
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error retrieving review: {str(e)}"
+            )
+
+    async def update_review(self, review_id: str, user_id: str, is_superuser: bool, review: ReviewUpdate) -> Optional[Dict[str, Any]]:
+        """Update a review"""
+        try:
+            # Get existing review
+            existing_review = await self.get_review(review_id)
+            if not existing_review:
+                raise ResourceNotFoundError("Review not found")
+
+            # Check if user owns the review or is admin
+            if not is_superuser and existing_review["user_id"] != user_id:
+                raise UnauthorizedError("Not authorized to update this review")
+
+            # Validate update data
+            if not review.model_dump(exclude_unset=True):
+                raise ValidationError("No valid fields to update")
+
+            # Update review data
+            update_data = review.model_dump(exclude_unset=True)
+            update_data["updated_at"] = datetime.now()
+
+            return await self.review_repository.update(review_id, update_data)
+        except (ResourceNotFoundError, UnauthorizedError, ValidationError) as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST if isinstance(e, ValidationError) else
+                status.HTTP_404_NOT_FOUND if isinstance(e, ResourceNotFoundError) else
+                status.HTTP_403_FORBIDDEN,
+                detail=str(e)
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error updating review: {str(e)}"
+            )
+
+    async def delete_review(self, review_id: str, user_id: str, is_superuser: bool) -> bool:
+        """Delete a review"""
+        try:
+            # Get existing review
+            existing_review = await self.get_review(review_id)
+            if not existing_review:
+                raise ResourceNotFoundError("Review not found")
+
+            # Check if user owns the review or is admin
+            if not is_superuser and existing_review["user_id"] != user_id:
+                raise UnauthorizedError("Not authorized to delete this review")
+
+            return await self.review_repository.delete(review_id)
+        except (ResourceNotFoundError, UnauthorizedError) as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND if isinstance(e, ResourceNotFoundError) else
+                status.HTTP_403_FORBIDDEN,
+                detail=str(e)
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error deleting review: {str(e)}"
+            )
+
+    async def get_movie_reviews(
+        self,
+        movie_id: str,
+        skip: int = 0,
+        limit: int = 10,
+        include_tmdb: bool = True
+    ) -> Dict[str, Any]:
+        """Get reviews for a movie from both TMDB and our database"""
+        try:
+            # Validate movie_id format
+            if not movie_id.isdigit():
+                raise ValidationError("Movie ID must be numeric")
+
+            # Get user reviews from our database
+            user_reviews = await self.review_repository.get_by_movie_id(
+                movie_id=movie_id,
+                skip=skip,
+                limit=limit
+            )
+
+            # Get TMDB reviews if requested
+            tmdb_reviews = []
+            total_tmdb_reviews = 0
+            if include_tmdb:
+                try:
+                    tmdb_reviews, total_tmdb_reviews = await self.tmdb_service.get_movie_reviews(
+                        movie_id,
+                        page=skip // limit + 1,
+                        limit=limit
+                    )
+                except Exception as e:
+                    logger.error(f"Error fetching TMDB reviews: {str(e)}")
+                    # Continue without TMDB reviews if there's an error
+
+            return {
+                "user_reviews": user_reviews,
+                "tmdb_reviews": [review.model_dump() for review in tmdb_reviews],
+                "total_user_reviews": len(user_reviews),
+                "total_tmdb_reviews": total_tmdb_reviews,
+                "page": skip // limit + 1,
+                "total_pages": (total_tmdb_reviews + limit - 1) // limit if total_tmdb_reviews > 0 else 0
             }
         except Exception as e:
-            raise HTTPException(
-                status_code=400, detail=f"Invalid movie ID format: {str(e)}")
+            raise Exception(f"Error retrieving reviews: {str(e)}")
 
-    async def get_review(self, review_id: str):
-        """
-        Get a review by its ID.
-        """
+    async def get_user_reviews(self, user_id: str, skip: int = 0, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get reviews by a user with pagination"""
         try:
-            review = await mongo.reviews_collection.find_one({"_id": ObjectId(review_id)})
-            if not review:
-                raise HTTPException(
-                    status_code=404, detail=f"Review with id {review_id} not found")
+            # Validate pagination parameters
+            if skip < 0 or limit < 1 or limit > 50:
+                raise ValidationError("Invalid pagination parameters")
 
-            return Review(
-                id=str(review["_id"]),
-                movie_id=review["movie_id"],
-                user_id=review["user_id"],
-                rating=review["rating"],
-                comment=review["comment"]
+            return await self.review_repository.get_by_user_id(user_id, skip, limit)
+        except ValidationError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
             )
         except Exception as e:
             raise HTTPException(
-                status_code=400, detail="Invalid review ID format")
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error retrieving user reviews: {str(e)}"
+            )
 
-    async def update_review(self, review_id: str, user_id: str, review_data: ReviewCreate):
-        """
-        Update a review by its ID.
-        """
-        # Get the review
+    async def get_user_review_for_movie(self, user_id: str, movie_id: str) -> Optional[Dict[str, Any]]:
+        """Get a user's review for a specific movie"""
         try:
-            review = await mongo.reviews_collection.find_one({"_id": ObjectId(review_id)})
-            if not review:
-                raise HTTPException(
-                    status_code=404, detail=f"Review with id {review_id} not found")
+            # Validate movie_id format
+            if not movie_id.isdigit():
+                raise ValidationError("Invalid movie ID format")
 
-            # Check if the user is the owner of the review
-            if review["user_id"] != user_id:
-                raise HTTPException(
-                    status_code=403, detail="You are not authorized to update this review")
+            return await self.review_repository.get_user_review_for_movie(user_id, movie_id)
+        except ValidationError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error retrieving user review: {str(e)}"
+            )
 
-            # Update the review
-            update_data = {
-                "rating": review_data.rating,
-                "comment": review_data.comment
+    async def get_movie_average_rating(self, movie_id: str) -> Dict[str, Any]:
+        """Get average rating from both TMDB and our database"""
+        try:
+            # Validate movie_id format
+            if not movie_id.isdigit():
+                raise ValidationError("Movie ID must be numeric")
+
+            # Get TMDB rating first
+            try:
+                movie_details = await self.tmdb_service.get_movie(movie_id)
+                tmdb_rating = movie_details.vote_average if movie_details else None
+            except Exception as e:
+                logger.error(f"Error fetching TMDB rating: {str(e)}")
+                tmdb_rating = None
+
+            # Get our database average rating
+            db_rating = await self.review_repository.get_movie_average_rating(movie_id)
+
+            return {
+                "tmdb_rating": tmdb_rating,
+                "user_rating": db_rating
             }
-
-            await mongo.reviews_collection.update_one(
-                {"_id": ObjectId(review_id)},
-                {"$set": update_data}
-            )
-
-            # Return the updated review
-            return Review(
-                id=str(review["_id"]),
-                movie_id=review["movie_id"],
-                user_id=review["user_id"],
-                rating=review_data.rating,
-                comment=review_data.comment
-            )
         except Exception as e:
-            raise HTTPException(
-                status_code=400, detail="Invalid review ID format")
-
-    async def delete_review(self, review_id: str, user_id: str):
-        """
-        Delete a review by its ID.
-        """
-        try:
-            # Get the review
-            review = await mongo.reviews_collection.find_one({"_id": ObjectId(review_id)})
-            if not review:
-                raise HTTPException(
-                    status_code=404, detail=f"Review with id {review_id} not found")
-
-            # Check if the user is the owner of the review
-            if review["user_id"] != user_id:
-                raise HTTPException(
-                    status_code=403, detail="You are not authorized to delete this review")
-
-            # Delete the review
-            result = await mongo.reviews_collection.delete_one({"_id": ObjectId(review_id)})
-            if result.deleted_count == 0:
-                raise HTTPException(
-                    status_code=404, detail=f"Review with id {review_id} not found")
-            return {"message": "Review deleted successfully"}
-        except Exception as e:
-            raise HTTPException(
-                status_code=400, detail="Invalid review ID format")
+            raise Exception(f"Error calculating average rating: {str(e)}")

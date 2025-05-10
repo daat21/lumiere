@@ -1,62 +1,61 @@
-# NL1C
+# NL1C Movie API
+A RESTful API for movie information, user authentication, reviews and watchlists, built with FastAPI and MongoDB.
 
-## Why use venv?
-1. Isolation: Keeps your backend dependencies separate from global/system Python or other projects.
-2. Consistency: Ensures your app runs the same everywhere—on your machine, teammate's machine, or server.
-3. Avoid version conflicts: Different projects may require different versions of the same library (e.g., Django 4 vs Django 3).
-4. Safer dependency management: Avoids messing up your global environment or system-wide Python packages.
-5. Easy collaboration: You can share your requirements.txt so others can recreate the same environment.
-6. Deployment-ready: Most deployment tools (like Docker, Heroku, or CI/CD) expect isolated environments.
+## Features
+- User registration, login, JWT authentication
+- Movie reviews (create, update, delete, list)
+- Personal watchlists (add/remove movies)
+- Admin user management
+- MongoDB async integration
 
-## How to set up venv?
-## Environment Settings
-The following steps guide you through setting up your development environment locally to ensure that you can run the FastAPI backend.
-### 1.Clone project to local：
+## Quick Start
+### 1. Clone the repo
+
 ```bash
-git clone <repository-url>
-cd NL1C_project
+git clone https://github.com/"username"/"repo".git
+cd "repo"
 ```
-### 2.Check Pyhton verison
-python3 --version
 
-Should return:
-Python 3.9.6
-
-### 3.Create a virtual environment
+### 2. Create and activate virtual environment
+#### For MAC:
+```bash
 python3 -m venv .venv
-
-### 4.Activate virtual environment
+source .venv/bin/activate
+```
 #### For Windows:
 .venv\Scripts\activate
-#### For MacOS:
-source .venv/bin/activate
+
 (When activated, your terminal prompt should change to (.venv).)
 
-### 5.Install dependencies
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
+### 4. Set up environment variables
+- Copy '.env.example' to '.env' and fill in your MongoDB URI, JWT secret, etc.
 
-## Starting MongoDB
-### Check the MongoDB service:
-brew services list
-### Starting MongoDB
-brew services start mongodb-community@7.0
-### If MongoDB is not installed, install:
-brew install mongodb-community@7.0
+### 5. Run the app
 
-## To run FastAPI Backend
-### For Windows and MacOS:
-python -m uvicorn movie_platform.main:movie_app --reload
+```bash
+unicorn src.main:app --reload
+```
 
-for accessing the Server and API docs, refer to the links within the returned text in the terminal after running the above command in the format : 
-│  Serving at: http://127.0.0.1:8000                  │
-│                                                     │
-│  API docs: http://127.0.0.1:8000/docs               │
+- Visit [http://128.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for Swagger UI.
 
+## Project Structure
+- src/
+- api/ # FastAPI routes
+- models/ # Pydantic models
+- services/ # Business logic
+- database/ # MongoDB connection & repositories
+- config/ # Settings & auth
 
-## To stop FastAPI Back end
-### For Windows and MacOS:
-Control+C
+---
 
-## To Deactivate Virtual Environment
-### For Windows and MacOS:
-deactivate
+## Tips
+- **Admin user**: Use 'scripts/create_admin.py' to create an admin account.
+- **Environment**: Never commit your '.env' or secrets to GitHub!
+- **Notices**: We have retained the feature that MongoDB can provide movie data, so that we can respond promptly when situations occur when calling the movie API.
+
+---

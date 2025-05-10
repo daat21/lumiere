@@ -1,46 +1,95 @@
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
-from src.services.auth_service import AuthService, ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+from src.database.repositories.user import UserRepository
+from src.models.token import LoginRequest, Token, TokenRefresh
+from src.models.user import User, UserCreate
+from src.services.auth_service import AuthService
 from src.services.user_service import UserService
-from src.models.user import UserCreate, User
-from src.models.token import Token
 
 router = APIRouter(tags=["auth"])
-auth_service = AuthService()
-user_service = UserService()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
-@router.post("/register", response_model=User)
-async def register(user_data: UserCreate):
-    """
-    Register a new user.
-    """
-    return await user_service.create_user(user_data)
+def get_auth_service() -> AuthService:
+    user_repository = UserRepository()
+    user_service = UserService(user_repository)
+    return AuthService(user_service)
 
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    auth_service: AuthService = Depends(get_auth_service)
+) -> User:
+    return await auth_service.get_current_user(token)
+
+@router.post("/register", response_model=Token)
+async def register(user: UserCreate, auth_service: AuthService = Depends(get_auth_service)):
+    return await auth_service.register(user)
+
+@router.post("/login", response_model=Token)
+async def login(login_request: LoginRequest, auth_service: AuthService = Depends(get_auth_service)):
+    return await auth_service.login(login_request.username, login_request.password)
 
 @router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    auth_service: AuthService = Depends(get_auth_service)
+):
     """
-    Get an access token.
+    Get access token for user authentication.
     """
-    user = await auth_service.authenticate_user(form_data.username, form_data.password)
-    if not user:
+    try:
+        user = await auth_service.authenticate_user(form_data.username, form_data.password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        access_token = auth_service.create_access_token(data={"sub": user.id})
+        refresh_token = auth_service.create_refresh_token(data={"sub": user.id})
+        
+        # Update last login time
+        await auth_service.user_service.update_last_login(user.id)
+        
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer"
+        }
+    except Exception as e:
         raise HTTPException(
-            status_code=401,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
         )
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = auth_service.create_access_token(
-        data={"sub": str(user["_id"])},
-        expires_delta=access_token_expires
-    )
-
-    return {"access_token": access_token, "token_type": "bearer"}
-
+@router.post("/refresh", response_model=Token)
+async def refresh_token(
+    token_data: TokenRefresh,
+    auth_service: AuthService = Depends(get_auth_service)
+):
+    """
+    Refresh access token using refresh token.
+    """
+    try:
+        access_token, refresh_token = await auth_service.refresh_access_token(token_data.refresh_token)
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(e)
+        )
 
 @router.get("/me", response_model=User)
-async def read_users_me(current_user: User = Depends(auth_service.get_current_user)):
+async def read_users_me(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get current user information.
+    """
     return current_user

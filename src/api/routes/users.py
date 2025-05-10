@@ -1,34 +1,157 @@
-from fastapi import APIRouter, HTTPException
-from src.models.user import UserCreate, UserLogin
-from src.database.mongodb import mongo
-from passlib.context import CryptContext
+from typing import List
 
-router = APIRouter(prefix="/users", tags=["users"])
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
+from src.database.repositories.user import UserRepository
+from src.models.user import User, UserCreate, UserLogin, UserUpdate
+from src.services.auth_service import AuthService
+from src.services.user_service import UserService
+from src.utils.exceptions import (ResourceNotFoundError, UnauthorizedError,
+                                  ValidationError)
 
-@router.post("/register")
-async def register_user(user: UserCreate):
-    existing_user = await mongo.users_collection.find_one({"username": user.username})
-    if existing_user:
-        raise HTTPException(status_code=400, detail="User already exists")
-    hashed_password = pwd_context.hash(user.password)
-    user_dict = user.model_dump()
-    user_dict["password"] = hashed_password
-    user_dict["id"] = ""
-    user_dict["disabled"] = False
-    await mongo.users_collection.insert_one(user_dict)
-    return {"message": "User registered successfully"}
+router = APIRouter(tags=["users"])
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
-@router.post("/login")
-async def login_user(user: UserLogin):
-    db_user = await mongo.users_collection.find_one({"username": user.username})
-    if not db_user or not pwd_context.verify(user.password, db_user["password"]):
+def get_user_service() -> UserService:
+    user_repository = UserRepository()
+    return UserService(user_repository)
+
+def get_auth_service() -> AuthService:
+    user_repository = UserRepository()
+    user_service = UserService(user_repository)
+    return AuthService(user_service)
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    auth_service: AuthService = Depends(get_auth_service)
+) -> User:
+    return await auth_service.get_current_user(token)
+
+# Register a new user
+@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
+async def register_user(user_data: UserCreate):
+    """Register a new user"""
+    try:
+        user_service = get_user_service()
+        return await user_service.create_user(user_data)
+    except ValidationError as e:
         raise HTTPException(
-            status_code=401, detail="Incorrect username or password")
-    return {"access_token": "fake-jwt-token", "token_type": "bearer"}
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating user: {str(e)}"
+        )
 
-# @router.get("/{username}")
-# async def get_current_user():
+# Create admin user (protected route)
+@router.post("/admin/register", response_model=User, status_code=status.HTTP_201_CREATED)
+async def register_admin_user(
+    user_data: UserCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """Register a new admin user (only accessible by existing admins)"""
+    if not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only administrators can create admin users"
+        )
+    try:
+        user_service = get_user_service()
+        return await user_service.create_admin_user(user_data)
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating admin user: {str(e)}"
+        )
+
+# List all users (admin only)
+@router.get("/", response_model=List[User])
+async def list_users(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user)
+):
+    """List all users (admin only)"""
+    if not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to list users"
+        )
+    user_service = get_user_service()
+    return await user_service.list_users(skip=skip, limit=limit)
+
+# Get current user information
+@router.get("/me", response_model=User)
+async def get_current_user_info(
+    current_user: User = Depends(get_current_user)
+):
+    return current_user
+
+# Update current user information
+@router.put("/me", response_model=User)
+async def update_current_user(
+    user_data: UserUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    user_service = get_user_service()
+    return await user_service.update_user(str(current_user.id), user_data, current_user)
+
+# Delete current user account
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_current_user(
+    current_user: User = Depends(get_current_user)
+):
+    user_service = get_user_service()
+    await user_service.delete_user(str(current_user.id), current_user)
+
+# Get user information by ID
+@router.get("/{user_id}", response_model=User)
+async def get_user(
+    user_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Only accessible by the user themselves or superusers.
+    """
+    if str(current_user.id) != user_id and not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to view this user"
+        )
+    user_service = get_user_service()
+    return await user_service.get_user_by_id(user_id)
+
+# Update user information by ID
+@router.put("/{user_id}", response_model=User)
+async def update_user(
+    user_id: str,
+    user_data: UserUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Only accessible by the user themselves or superusers.
+    """
+    user_service = get_user_service()
+    return await user_service.update_user(user_id, user_data, current_user)
+
+# Delete user account by ID
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(
+    user_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Only accessible by the user themselves or superusers.
+    """
+    user_service = get_user_service()
+    await user_service.delete_user(user_id, current_user)
     
