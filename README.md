@@ -15,28 +15,25 @@ npm install
 npm run dev
 ```
 ### Server Side
+Open a new terminal on the root of NL1C
 ```bash
-cd ../server
+cd server
 python3 -m venv .venv
-# for windows
-.venv\Scripts\activate
-# for macos
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# Start MongoDB
-brew services list
-brew services start mongodb-community@7.0
-python -m uvicorn movie_platform.main:movie_app --reload
 ```
+Then, rename '.env.example' to '.env' and fill in your MongoDB URI, JWT secret, etc. And run,
+```bash
+python3 -m unicorn src.main:app --reload
+```
+
+Read more in <a href="https://github.cs.adelaide.edu.au/MCI-Project-2025/NL1C/blob/main/server/README.md">Server README</a>.
 
 ## Git Repository Branch Overview
 <img width="1170" alt="image" src="https://github.cs.adelaide.edu.au/MCI-Project-2025/NL1C/assets/4653/93e29bbb-bd04-4748-8495-28f7142fd63a">
 
 ## Project Overview
 ### ‼️ For Milestone 1
-#### Client Side
-
 1. AI Recommendations (AI ChatBot)
 2. *(static)* Authentication `/login`, `/signup` 
 3. Movie detail `/movieDesc/abc` 
@@ -50,6 +47,4 @@ python -m uvicorn movie_platform.main:movie_app --reload
 7. *(static)* User profile `/settings`  
     - profile
     - reset password
-
-#### Server Side
 ...
