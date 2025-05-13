@@ -70,4 +70,5 @@ class User(BaseModel):
     last_login: Optional[datetime] = None
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
-    preferences: dict = Field(default_factory=dict)
+    watchlists: list = Field(default_factory=list)
+    reviews: list = Field(default_factory=list)

@@ -7,6 +7,8 @@ from src.database.repositories.user import UserRepository
 from src.models.user import User, UserCreate, UserLogin, UserUpdate
 from src.services.auth_service import AuthService
 from src.services.user_service import UserService
+from src.services.review_service import ReviewService
+from src.services.watchlist_service import WatchlistService
 from src.utils.exceptions import (ResourceNotFoundError, UnauthorizedError,
                                   ValidationError)
 
@@ -94,7 +96,20 @@ async def list_users(
 async def get_current_user_info(
     current_user: User = Depends(get_current_user)
 ):
-    return current_user
+    # Query the user's watchlists
+    watchlist_service = WatchlistService()
+    user_watchlists = await watchlist_service.get_user_watchlists(user_id=current_user.id)
+
+    # Query the user's reviews
+    review_service = ReviewService()
+    user_reviews = await review_service.get_user_reviews(user_id = current_user.id)
+
+    # Create the user with the watchlists and reviews
+    user_dict = current_user.model_dump()
+    user_dict["watchlists"] = user_watchlists
+    user_dict["reviews"] = user_reviews
+    
+    return user_dict
 
 # Update current user information
 @router.put("/me", response_model=User)

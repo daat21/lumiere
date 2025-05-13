@@ -11,7 +11,6 @@ from src.utils.exceptions import (ResourceNotFoundError, UnauthorizedError,
                                   ValidationError)
 
 router = APIRouter(
-    prefix="/movies",
     tags=["reviews"],
     responses={
         404: {"description": "Resource not found"},
@@ -204,52 +203,30 @@ async def update_review(
             detail=f"Error updating review: {str(e)}"
         )
 
-@router.get("/reviews/{movie_id}/reviews/me", response_model=Dict[str, Any])
+@router.get("/users/me/reviews", 
+            response_model=List[Dict[str, Any]],
+            summary="Get all reviews for the current user",
+            description="Get all reviews for the current user"
+)
 async def get_my_reviews(
-    movie_id: str,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=50),
+    sort_by: str = Query("created_at", regex=r"^(created_at|rating|updated_at)$"),
+    sort_order: int = Query(-1, ge=-1, le=1),
     review_service: ReviewService = Depends(get_review_service),
     current_user: User = Depends(get_current_user)
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:
     """Get all reviews for the current user"""
     try:
-        return await review_service.get_user_review_for_movie(
-            movie_id=movie_id,
-            user_id=str(current_user.id)
-        )
-    except ValidationError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
+        return await review_service.get_user_reviews(
+            user_id=str(current_user.id),
+            skip=skip,
+            limit=limit,
+            sort_by=sort_by,
+            sort_order=sort_order
         )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error retrieving reviews: {str(e)}"
         )
-
-# @router.get(
-#     "/reviews/{review_id}",
-#     response_model=Dict[str, Any],
-#     summary="Get a review",
-#     description="Get a specific review by ID."
-# )
-# async def get_review(
-#     review_id: str,
-#     review_service: ReviewService = Depends(get_review_service)
-# ) -> Dict[str, Any]:
-#     """Get a specific review by ID"""
-#     try:
-#         review = await review_service.get_review(review_id)
-#         if not review:
-#             raise ResourceNotFoundError("Review not found")
-#         return review
-#     except ResourceNotFoundError as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail=str(e)
-#         )
-#     except Exception as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail=f"Error retrieving review: {str(e)}"
-#         )
