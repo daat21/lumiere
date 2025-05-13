@@ -176,14 +176,20 @@ class ReviewService:
         except Exception as e:
             raise Exception(f"Error retrieving reviews: {str(e)}")
 
-    async def get_user_reviews(self, user_id: str, skip: int = 0, limit: int = 10) -> List[Dict[str, Any]]:
+    async def get_user_reviews(
+            self, 
+            user_id: str, 
+            skip: int = 0, 
+            limit: int = 10, 
+            sort_by: str = "created_at", 
+            sort_order: int = -1) -> List[Dict[str, Any]]:
         """Get reviews by a user with pagination"""
         try:
             # Validate pagination parameters
             if skip < 0 or limit < 1 or limit > 50:
                 raise ValidationError("Invalid pagination parameters")
 
-            return await self.review_repository.get_by_user_id(user_id, skip, limit)
+            return await self.review_repository.get_by_user_id(user_id, skip, limit, sort_by, sort_order)
         except ValidationError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
