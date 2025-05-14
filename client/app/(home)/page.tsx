@@ -14,6 +14,10 @@ export default async function Home() {
     popularMoviesPromise,
   ])
 
+  if (!popularMovies) {
+    return <div>Error loading movies. Please check your API key configuration.</div>
+  }
+
   const initialMoreToExploreMovies = popularMovies.slice(10, 19)
 
   return (
@@ -27,7 +31,7 @@ export default async function Home() {
       <div>
         <h1>Most Popular</h1>
         <Suspense fallback={<div>Loading...</div>}>
-          <MostPopular movies={popularMoviesPromise} />
+          <MostPopular movies={popularMovies} />
         </Suspense>
       </div>
       <div>

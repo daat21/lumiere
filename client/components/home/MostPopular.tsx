@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { use } from 'react'
 import { MovieCard } from '@/components/home/MovieCard'
 import {
   Carousel,
@@ -19,8 +18,8 @@ interface Movie {
   vote_average: number
 }
 
-export function MostPopular({ movies }: { movies: Promise<Movie[]> }) {
-  const topRatedMovies = use(movies).slice(0, 10)
+export function MostPopular({ movies }: { movies: Movie[] }) {
+  const topRatedMovies = movies.slice(0, 10)
 
   return (
     <Carousel
