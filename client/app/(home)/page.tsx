@@ -20,6 +20,9 @@ export default async function Home() {
 
   const initialMoreToExploreMovies = popularMovies.slice(10, 19)
 
+  const testFetching = await fetch('http://localhost:8000/')
+  console.log(testFetching)
+
   return (
     <div className="flex flex-col gap-12">
       <div>
