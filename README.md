@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 Then, rename '.env.example' to '.env' and fill in your MongoDB URI, JWT secret, etc. And run,
 ```bash
-python3 -m unicorn src.main:app --reload
+python3 -m uvicorn src.main:app --reload
 ```
 
 Read more in <a href="https://github.cs.adelaide.edu.au/MCI-Project-2025/NL1C/tree/feature/user_profile/server">Server README</a>.
