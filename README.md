@@ -27,7 +27,7 @@ Then, rename '.env.example' to '.env' and fill in your MongoDB URI, JWT secret, 
 python3 -m unicorn src.main:app --reload
 ```
 
-Read more in <a href="https://github.cs.adelaide.edu.au/MCI-Project-2025/NL1C/blob/main/server/README.md">Server README</a>.
+Read more in <a href="https://github.cs.adelaide.edu.au/MCI-Project-2025/NL1C/tree/feature/user_profile/server">Server README</a>.
 
 ## Git Repository Branch Overview
 <img width="1170" alt="image" src="https://github.cs.adelaide.edu.au/MCI-Project-2025/NL1C/assets/4653/93e29bbb-bd04-4748-8495-28f7142fd63a">
