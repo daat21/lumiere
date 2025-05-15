@@ -1,15 +1,46 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { createUser } from '@/lib/server/user/createUser'
+import { useActionState } from 'react'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'form'>) {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [state, formAction, isPending] = useActionState(createUser, undefined)
+  const router = useRouter()
+
+  // Handle toast notifications based on server action results
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(state.message || 'User created successfully')
+      setTimeout(() => {
+        router.push('/login')
+      }, 2000)
+    } else if (state?.error) {
+      toast.error(state.error)
+    }
+  }, [state, router])
+
   return (
-    <form className={cn('flex flex-col gap-6', className)} {...props}>
+    <form
+      action={formAction}
+      className={cn('flex flex-col gap-6', className)}
+      {...props}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Sign your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -19,26 +50,68 @@ export function SignupForm({
       <div className="grid gap-6">
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            id="email"
+            name="email"
+            placeholder="m@example.com"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          {state?.errors?.email && (
+            <p className="text-sm text-red-500">{state.errors.email}</p>
+          )}
         </div>
+
         <div className="grid gap-2">
           <Label htmlFor="username">Username</Label>
-          <Input id="username" type="text" required />
+          <Input
+            id="username"
+            name="username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+          {state?.errors?.username && (
+            <p className="text-sm text-red-500">{state.errors.username}</p>
+          )}
         </div>
+
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          {state?.errors?.password && (
+            <p className="text-sm text-red-500">{state.errors.password}</p>
+          )}
         </div>
+
         <div className="grid gap-2">
           <div className="flex items-center">
-            <Label htmlFor="password">Confirm Password</Label>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+          />
+          {state?.errors?.confirmPassword && (
+            <p className="text-sm text-red-500">
+              {state.errors.confirmPassword}
+            </p>
+          )}
         </div>
-        <Button type="submit" className="w-full">
-          Sign up
+
+        <Button type="submit" disabled={isPending} className="w-full">
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isPending ? 'Signing up...' : 'Sign up'}
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
