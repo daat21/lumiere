@@ -8,7 +8,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 from src.config import auth_settings
-from src.models.token import Token, TokenRefresh
+from src.models.token import LoginResponse, Token, TokenRefresh
 from src.models.user import User
 from src.services.user_service import UserService
 
@@ -19,6 +19,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 class AuthService:
     def __init__(self, user_service: UserService = None):
         self.user_service = user_service or UserService()
+
+    async def login(self, username: str, password: str) -> LoginResponse:
+        """Login user and return user information"""
+        # Authenticate user
+        user = await self.authenticate_user(username, password)
+        
+        # Update last login time
+        await self.user_service.update_last_login(user.id)
+        
+        return LoginResponse(user=user)
 
     async def authenticate_user(self, username: str, password: str) -> User:
         """Authenticate a user and return user object if successful"""

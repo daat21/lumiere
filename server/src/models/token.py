@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from .user import User
 
 
 class Token(BaseModel):
@@ -6,6 +7,12 @@ class Token(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str
+
+
+class AccessToken(BaseModel):
+    """Access token response model"""
+    access_token: str
+    token_type: str = "bearer"
 
 
 class TokenRefresh(BaseModel):
@@ -17,3 +24,9 @@ class LoginRequest(BaseModel):
     """Login request model"""
     username: str
     password: str
+
+
+class LoginResponse(BaseModel):
+    """Login response model"""
+    user: User
+    message: str = "Login successful"
