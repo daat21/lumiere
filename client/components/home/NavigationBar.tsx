@@ -32,7 +32,10 @@ export async function NavigationBar() {
           <span className="font-semibold">Watchlist</span>
         </Link>
         {user ? (
-          <UserDropdownMenu />
+          <div className="mr-6 flex items-center gap-4">
+            <p>Hi, {user.username}</p>
+            <UserDropdownMenu />
+          </div>
         ) : (
           <>
             <Button asChild variant="outline">

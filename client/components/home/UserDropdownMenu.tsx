@@ -20,7 +20,7 @@ export default function UserDropdownMenu({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="mr-2 flex items-center gap-1 outline-none focus:outline-none focus-visible:outline-none">
+      <DropdownMenuTrigger className="flex items-center gap-1 outline-none focus:outline-none focus-visible:outline-none">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
