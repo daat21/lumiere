@@ -5,7 +5,7 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from src.config import auth_settings
-from src.models.token import LoginResponse, Token, TokenRefresh, AccessToken
+from src.models.token import LoginResponse, Token, TokenRefresh
 from src.models.user import User
 from src.services.user_service import UserService
 

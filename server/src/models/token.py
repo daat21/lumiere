@@ -23,6 +23,7 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     """Login response model"""
     user: User
-    access_token: AccessToken
+    # access_token: AccessToken
+    access_token: str
     refresh_token: str
     message: str = "Login successful!"
