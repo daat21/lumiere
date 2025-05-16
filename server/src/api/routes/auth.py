@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-
 from src.database.repositories.user import UserRepository
 from src.models.token import LoginRequest, LoginResponse, Token, TokenRefresh
-from src.models.user import User, UserCreate
+from src.models.user import User
 from src.services.auth_service import AuthService
 from src.services.user_service import UserService
 
@@ -47,7 +46,7 @@ async def login_for_access_token(
         
         access_token = auth_service.create_access_token(data={"sub": user.id})
         refresh_token = auth_service.create_refresh_token(data={"sub": user.id})
-        
+
         # Update last login time
         await auth_service.user_service.update_last_login(user.id)
         

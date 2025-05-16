@@ -9,6 +9,7 @@ from src.database.connection import mongo
 from src.database.repositories.movie import MovieRepository
 from src.database.repositories.review import ReviewRepository
 from src.database.repositories.user import UserRepository
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Specific sources should be set up in the production environment
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
