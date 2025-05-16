@@ -9,20 +9,25 @@ import { useActionState, useEffect } from 'react'
 import { login } from '@/lib/server/user/login'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'form'>) {
   const [state, formAction, isPending] = useActionState(login, undefined)
+  const router = useRouter()
 
   useEffect(() => {
     if (state?.success) {
       toast.success('User logged in successfully')
+      setTimeout(() => {
+        router.push('/')
+      }, 500)
     } else if (state?.error) {
       toast.error(state.error)
     }
-  }, [state])
+  }, [state, router])
 
   return (
     <form
