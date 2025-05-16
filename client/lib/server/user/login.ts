@@ -71,7 +71,7 @@ export const login = async (prevState: LoginFormState, formData: FormData) => {
   } else {
     return {
       success: false,
-      error: 'Failed to login',
+      error: 'Incorrect username or password',
     }
   }
 }
