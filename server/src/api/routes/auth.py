@@ -32,8 +32,8 @@ async def login_for_access_token(
     auth_service: AuthService = Depends(get_auth_service)
 ):
     """
-    Get access token for user authentication.
-    This endpoint follows OAuth2 standard and is used by FastAPI's OAuth2PasswordBearer.
+    OAuth2 standard token endpoint for API authentication.
+    Returns access token, refresh token and token type.
     """
     try:
         user = await auth_service.authenticate_user(form_data.username, form_data.password)

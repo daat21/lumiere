@@ -9,12 +9,6 @@ class Token(BaseModel):
     token_type: str
 
 
-class AccessToken(BaseModel):
-    """Access token response model"""
-    access_token: str
-    token_type: str = "bearer"
-
-
 class TokenRefresh(BaseModel):
     """Token refresh request model"""
     refresh_token: str
