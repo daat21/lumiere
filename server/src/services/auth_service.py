@@ -1,14 +1,11 @@
 from datetime import datetime, timedelta
 from typing import Optional, Tuple
-
 import bcrypt
 import jwt
-from bson import ObjectId
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-
 from src.config import auth_settings
-from src.models.token import LoginResponse, Token, TokenRefresh
+from src.models.token import LoginResponse, Token, TokenRefresh, AccessToken
 from src.models.user import User
 from src.services.user_service import UserService
 
@@ -28,7 +25,20 @@ class AuthService:
         # Update last login time
         await self.user_service.update_last_login(user.id)
         
-        return LoginResponse(user=user)
+        # Generate tokens
+        access_token_str = self.create_access_token({"sub": user.id})
+        refresh_token = self.create_refresh_token({"sub": user.id})
+        
+        # Create AccessToken object
+        access_token = AccessToken(access_token=access_token_str)
+        
+        return LoginResponse(
+            user=user,
+            access_token=access_token,
+            refresh_token=refresh_token,
+            message="Login successful!"
+        )
+        
 
     async def authenticate_user(self, username: str, password: str) -> User:
         """Authenticate a user and return user object if successful"""

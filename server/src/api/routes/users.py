@@ -128,6 +128,54 @@ async def delete_current_user(
     user_service = get_user_service()
     await user_service.delete_user(str(current_user.id), current_user)
 
+@router.post("/avatar", status_code=status.HTTP_200_OK)
+async def upload_avatar(
+    avatar_url: str,
+    current_user: User = Depends(get_current_user),
+    user_service: UserService = Depends(get_user_service)
+):
+    """
+    Update user avatar URL, e.g. https://www.shutterstock.com/image-vector/black-woman-smiling-portrait-vector-600nw-2281497689.jpg
+    """
+    try:
+        avatar_url = await user_service.upload_avatar(str(current_user.id), avatar_url)
+        return {"avatar_url": avatar_url}
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating avatar: {str(e)}"
+        )
+
+@router.delete("/avatar", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_avatar(
+    current_user: User = Depends(get_current_user),
+    user_service: UserService = Depends(get_user_service)
+):
+    """
+    Reset user avatar to default
+    """
+    try:
+        await user_service.delete_avatar(current_user.id)
+        return {"message": "Avatar deleted successfully."}
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error resetting avatar: {str(e)}"
+        )
+
+
+# Backend management and administrator operations
+
 # Get user information by ID
 @router.get("/{user_id}", response_model=User)
 async def get_user(
@@ -135,7 +183,7 @@ async def get_user(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Only accessible by the user themselves or superusers.
+    Only accessible by the administrator.
     """
     if str(current_user.id) != user_id and not current_user.is_superuser:
         raise HTTPException(
@@ -153,7 +201,7 @@ async def update_user(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Only accessible by the user themselves or superusers.
+    Only accessible by the administrator.
     """
     user_service = get_user_service()
     return await user_service.update_user(user_id, user_data, current_user)
@@ -165,8 +213,8 @@ async def delete_user(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Only accessible by the user themselves or superusers.
+    Only accessible by the administrator.
     """
     user_service = get_user_service()
     await user_service.delete_user(user_id, current_user)
-    
+
