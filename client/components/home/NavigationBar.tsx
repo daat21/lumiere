@@ -34,7 +34,10 @@ export async function NavigationBar() {
         {user ? (
           <div className="mr-6 flex items-center gap-4">
             <p>Hi, {user.username}</p>
-            <UserDropdownMenu />
+            <UserDropdownMenu
+              avatarUrl={user.avatar_url}
+              username={user.username}
+            />
           </div>
         ) : (
           <>
