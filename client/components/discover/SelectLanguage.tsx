@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Select,
   SelectContent,
@@ -6,12 +8,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useSearchParams } from 'next/navigation'
 
 export function SelectLanguage() {
+  const searchParams = useSearchParams()
+  const currentValue = searchParams.get('language') || 'en'
+
   return (
     <div className="grid gap-2">
       <p className="font-bold">Language</p>
-      <Select defaultValue="en">
+      <Select defaultValue={currentValue} name="language">
         <SelectTrigger className="w-[140px]">
           <SelectValue />
         </SelectTrigger>
@@ -24,7 +30,7 @@ export function SelectLanguage() {
             <SelectItem value="it">Italian</SelectItem>
             <SelectItem value="zh">Chinese</SelectItem>
             <SelectItem value="ja">Japanese</SelectItem>
-            <SelectItem value="zh-HK">Cantonese</SelectItem>
+            <SelectItem value="cn">Cantonese</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
