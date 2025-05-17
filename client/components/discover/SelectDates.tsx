@@ -15,16 +15,25 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '../ui/input'
+import { useSearchParams } from 'next/navigation'
 
 export function SelectDates({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
+  const searchParams = useSearchParams()
+  const releaseDateGte = searchParams.get('release_date_gte') || '2025-01-01'
+  const releaseDateLte = searchParams.get('release_date_lte') || '2025-01-20'
+  const isInitialIncludeAllDates = !searchParams.has('include_all_dates')
+
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: new Date(releaseDateGte),
+    to: addDays(new Date(releaseDateLte), 20),
   })
 
-  const [includeAllDates, setIncludeAllDates] = useState(true)
+  const [includeAllDates, setIncludeAllDates] = useState(
+    isInitialIncludeAllDates
+  )
 
   return (
     <div className={cn('grid gap-2', className)}>
@@ -74,6 +83,25 @@ export function SelectDates({
           />
         </PopoverContent>
       </Popover>
+      {!includeAllDates && (
+        <>
+          <Input
+            type="hidden"
+            name="release_date_gte"
+            value={date?.from ? format(date.from, 'yyyy-MM-dd') : ''}
+          />
+          <Input
+            type="hidden"
+            name="release_date_lte"
+            value={date?.to ? format(date.to, 'yyyy-MM-dd') : ''}
+          />
+          <Input
+            type="hidden"
+            name="include_all_dates"
+            value={includeAllDates ? 'true' : 'false'}
+          />
+        </>
+      )}
     </div>
   )
 }
