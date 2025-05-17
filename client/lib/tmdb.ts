@@ -80,12 +80,13 @@ const getDiscoverMovies = async (params: {
   release_date_lte?: string
   min_votes?: string
   genre_id?: string
+  page?: string
 }) => {
   const searchParams = new URLSearchParams({
     include_adult: 'false',
     include_video: 'false',
     language: 'en-US',
-    page: '1',
+    page: params.page || '1',
   })
 
   if (params.sort_by) searchParams.append('sort_by', params.sort_by)
@@ -103,7 +104,7 @@ const getDiscoverMovies = async (params: {
     options
   )
   const data = await response.json()
-  return data.results
+  return data
 }
 
 export {
