@@ -21,9 +21,9 @@ export default function UserDropdownMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-1 outline-none focus:outline-none focus-visible:outline-none">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
+        <Avatar className="border-ring border">
+          <AvatarImage src={avatarUrl} alt={username} />
+          <AvatarFallback>{username?.slice(0, 2)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

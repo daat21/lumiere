@@ -46,11 +46,19 @@ export const login = async (prevState: LoginFormState, formData: FormData) => {
   })
 
   const data = await res.json()
+  const { access_token, refresh_token } = data
 
   if (res.ok) {
-    const { access_token, token_type } = data
     const cookieStore = await cookies()
     cookieStore.set('access_token', access_token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 30,
+      sameSite: 'lax',
+      path: '/',
+    })
+
+    cookieStore.set('refresh_token', refresh_token, {
       httpOnly: true,
       secure: true,
       maxAge: 60 * 60 * 24 * 30,
