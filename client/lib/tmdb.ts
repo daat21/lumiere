@@ -55,22 +55,22 @@ const getTrendingMovies = async () => {
   return data.results
 }
 
-const getSearchResultsByMovie = async (query: string) => {
+const getSearchResultsByMovie = async (query: string, page?: number) => {
   const response = await fetch(
-    `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
+    `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page || 1}`,
     options
   )
   const data = await response.json()
-  return data.results
+  return data
 }
 
-const getSearchResultsByPerson = async (query: string) => {
+const getSearchResultsByPerson = async (query: string, page?: number) => {
   const response = await fetch(
-    `https://api.themoviedb.org/3/search/person?query=${query}&include_adult=false&language=en-US&page=1`,
+    `https://api.themoviedb.org/3/search/person?query=${query}&include_adult=false&language=en-US&page=${page || 1}`,
     options
   )
   const data = await response.json()
-  return data.results
+  return data
 }
 
 const getDiscoverMovies = async (params: {
