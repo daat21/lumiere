@@ -65,8 +65,8 @@ export function SearchBar() {
         ])
 
         // Deduplicate movie results by title using reduce for better type safety
-        const uniqueMovies = movieData
-          ? movieData.reduce((acc: Movie[], current: Movie) => {
+        const uniqueMovies = movieData.results
+          ? movieData.results.reduce((acc: Movie[], current: Movie) => {
               if (!acc.some(movie => movie.title === current.title)) {
                 acc.push(current)
               }
@@ -75,7 +75,7 @@ export function SearchBar() {
           : []
 
         setMovieResults(uniqueMovies) // Set the deduplicated results
-        setPersonResults(personData || [])
+        setPersonResults(personData.results || [])
       } catch (error) {
         console.error('Failed to fetch search results:', error)
         setMovieResults([])
