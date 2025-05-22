@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/avatar"
 
 export default async function Profile() {
-  //const user = await getCurrentUser()
-  const user={
+  const user = await getCurrentUser()
+  /*const user={
   "id": "682b0526c3ccd3a52710734f",
   "username": "emmanuel",
   "email": "emmanuel@icloud.com",
@@ -23,7 +23,7 @@ export default async function Profile() {
   "bio": "I love watching action movies",
   "watchlists": [],
   "reviews": []
-  };
+  };*/
 
   return (
   <div className="flex flex-col  border-amber-100">
