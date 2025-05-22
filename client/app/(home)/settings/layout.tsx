@@ -84,10 +84,10 @@ function settingsLayout({children}:{
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="username" className="text-sm font-medium">
+                    <label htmlFor="avatar" className="text-sm font-medium">
                       Avatar
                     </label>
-                    <Input id="username" placeholder="https://" className=" border-gray-800" />
+                    <Input id="avatar" placeholder="https://" className=" border-gray-800" />
                     <p className="text-xs text-gray-400">
                       Place the URL for your profile picture here.
                     </p>
