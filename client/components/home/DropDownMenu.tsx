@@ -8,7 +8,7 @@ import {
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import { House, Binoculars, Bookmark, User, Settings } from 'lucide-react'
 
-export function DropdownMenuComponent() {
+export function DropdownMenuComponent({id}:{id:string}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +33,7 @@ export function DropdownMenuComponent() {
             <span className="text-lg font-bold">Watchlist</span>
           </DropdownMenuItem>
         </Link>
-        <Link href="/profile">
+        <Link href={`/profile/${id}`}>
           <DropdownMenuItem>
             <User className="h-6 w-6" />
             <span className="text-lg font-bold">Profile</span>

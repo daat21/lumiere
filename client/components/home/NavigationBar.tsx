@@ -10,11 +10,11 @@ import UserDropdownMenu from './UserDropdownMenu'
 export async function NavigationBar() {
   const user = await getCurrentUser()
   // const user = null
-
+  console.log(user)
   return (
     <nav className="flex items-center justify-between p-5 px-10">
       <div className="flex items-center gap-4">
-        <DropdownMenuComponent />
+        <DropdownMenuComponent id="{user.id}"/>
         <Link href="/">
           <span className="text-2xl font-bold">Lumiere</span>
         </Link>
@@ -37,6 +37,7 @@ export async function NavigationBar() {
             <UserDropdownMenu
               avatarUrl={user.avatar_url}
               username={user.username}
+              id="{user.id}"
             />
           </div>
         ) : (
