@@ -30,10 +30,19 @@ class ReviewService:
             if existing_review:
                 raise ValidationError("User has already reviewed this movie")
 
+            # Get movie title from TMDB
+            try:
+                movie_details = await self.tmdb_service.get_movie(movie_id)
+                movie_title = movie_details.title if movie_details else "Unknown Movie"
+            except Exception as e:
+                logger.error(f"Error fetching movie title: {str(e)}")
+                movie_title = "Unknown Movie"
+
             # Create review data
             review_data = review.model_dump()
             review_data.update({
                 "movie_id": movie_id,
+                "movie_title": movie_title,
                 "user_id": user_id,
                 "username": username,
                 "created_at": datetime.now(),
