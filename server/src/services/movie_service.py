@@ -1,5 +1,4 @@
 from typing import List, Optional
-
 from src.models.tmdb_movie import (TMDBMovieCreditsResponse,
                                    TMDBMovieDetailResponse, TMDBMovieResponse,
                                    TMDBMovieVideosResponse)

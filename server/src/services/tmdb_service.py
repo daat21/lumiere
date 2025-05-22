@@ -2,10 +2,8 @@ import asyncio
 import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-
 import httpx
 from pydantic import BaseModel, Field
-
 from src.config import settings
 from src.models.tmdb_movie import (TMDBMovieCreditsResponse,
                                    TMDBMovieDetailResponse, TMDBMovieResponse,
