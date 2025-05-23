@@ -1,8 +1,6 @@
 import logging
 from typing import Any, Dict, List, Optional
-
 from fastapi import HTTPException, status
-
 from src.database.repositories.watchlist import WatchlistRepository
 from src.models.watchlist import (WatchlistCreate, WatchlistMovie,
                                   WatchlistUpdate)

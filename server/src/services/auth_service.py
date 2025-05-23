@@ -26,11 +26,8 @@ class AuthService:
         await self.user_service.update_last_login(user.id)
         
         # Generate tokens
-        access_token_str = self.create_access_token({"sub": user.id})
+        access_token = self.create_access_token({"sub": user.id})
         refresh_token = self.create_refresh_token({"sub": user.id})
-        
-        # Create AccessToken object
-        access_token = AccessToken(access_token=access_token_str)
         
         return LoginResponse(
             user=user,

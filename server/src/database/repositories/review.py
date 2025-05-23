@@ -51,6 +51,12 @@ class ReviewRepository(BaseRepository[Review]):
             name="movie_rating_sort"
         )
 
+        # Index for movie title search
+        await self.collection.create_index(
+            [("movie_title", "text")],
+            name="movie_title_search"
+        )
+
         self._indexes_created = True
 
     async def create(self, review_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -60,7 +66,7 @@ class ReviewRepository(BaseRepository[Review]):
             await self.ensure_indexes()
 
             # Validate required fields
-            required_fields = ["movie_id", "user_id",
+            required_fields = ["movie_id", "movie_title", "user_id",
                                "username", "rating", "comment"]
             for field in required_fields:
                 if field not in review_data:

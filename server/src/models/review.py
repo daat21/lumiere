@@ -12,6 +12,7 @@ class Review(BaseModel):
             "example": {
                 "id": "507f1f77bcf86cd799439011",
                 "movie_id": "123456",
+                "movie_title": "The Dark Knight",
                 "user_id": "507f1f77bcf86cd799439012",
                 "username": "john_doe",
                 "rating": 8.5,
@@ -24,6 +25,7 @@ class Review(BaseModel):
     
     id: str = Field(..., alias="_id", description="Unique identifier for the review")
     movie_id: str = Field(..., min_length=1, description="TMDB ID of the movie")
+    movie_title: str = Field(..., min_length=1, description="Title of the movie")
     user_id: str = Field(..., min_length=1, description="ID of the user who wrote the review")
     username: str = Field(..., min_length=1, max_length=50, description="Username of the reviewer")
     rating: float = Field(..., ge=0, le=10, description="Rating from 0 to 10")
