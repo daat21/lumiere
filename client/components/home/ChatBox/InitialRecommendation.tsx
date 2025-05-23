@@ -32,6 +32,7 @@ export function InitialRecommendation({ movies }: InitialRecommendationProps) {
                   ? movie.overview.slice(0, 280) + '...'
                   : movie.overview
               }
+              id={movie.id.toString()}
               className="bg-sidebar"
             />
           </li>

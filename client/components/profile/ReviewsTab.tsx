@@ -89,6 +89,7 @@ export default async function ReviewsTab({ searchParams }: ReviewsTabProps) {
               comment_date={review.created_at}
               avatar_url={user?.avatar_url || ''}
               username={user?.username || ''}
+              id={review.movie_id}
             />
           </div>
         ))}

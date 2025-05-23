@@ -92,6 +92,7 @@ export function MoreToExplore({
               <MovieBackdropCard
                 title={movie.title}
                 image={movie.backdrop_path}
+                id={movie.id.toString()}
               />
             </div>
           ))}

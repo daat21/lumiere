@@ -73,6 +73,7 @@ export function MessageList({
               movie.overview
             }
             className="bg-sidebar"
+            id={movie.id.toString()}
           />
         )
       }

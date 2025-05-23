@@ -6,45 +6,52 @@ import { Star, Bookmark } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export function MovieCard({
   title,
   rating,
   image,
+  id,
 }: {
   title: string
   rating: number
   image: string | null
+  id: string
 }) {
   return (
     <Card className="h-[420px] w-[200px] overflow-hidden rounded-lg py-0 shadow-lg">
-      <CardContent className="p-0">
-        {image ? (
-          <Image
-            src={`https://image.tmdb.org/t/p/w500${image}`}
-            alt={title}
-            width={200}
-            height={300}
-            className="object-cover"
-          />
-        ) : (
-          <div className="h-[300px] w-[200px] bg-gray-200" />
-        )}
-        <div className="p-2">
-          <div className="mt-1 flex items-center justify-between">
-            <div className="ml-1/2 flex items-center gap-1 p-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
+      <Link href={`/movie/${id}`}>
+        <CardContent className="p-0">
+          {image ? (
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${image}`}
+              alt={title}
+              width={200}
+              height={300}
+              className="object-cover"
+            />
+          ) : (
+            <div className="h-[300px] w-[200px] bg-gray-200" />
+          )}
+          <div className="p-2">
+            <div className="mt-1 flex items-center justify-between">
+              <div className="ml-1/2 flex items-center gap-1 p-1">
+                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                <span className="text-sm font-semibold">
+                  {rating.toFixed(1)}
+                </span>
+              </div>
+              <button className="group rounded-full p-1">
+                <Bookmark className="h-5 w-5 text-green-500 group-hover:fill-green-500 group-hover:text-green-500" />
+              </button>
             </div>
-            <button className="group rounded-full p-1">
-              <Bookmark className="h-5 w-5 text-green-500 group-hover:fill-green-500 group-hover:text-green-500" />
-            </button>
+            <div className="mx-2 mt-4 text-center">
+              <p className="text-base font-bold">{title}</p>
+            </div>
           </div>
-          <div className="mx-2 mt-4 text-center">
-            <p className="text-base font-bold">{title}</p>
-          </div>
-        </div>
-      </CardContent>
+        </CardContent>
+      </Link>
     </Card>
   )
 }
@@ -52,30 +59,34 @@ export function MovieCard({
 export function MovieBackdropCard({
   title,
   image,
+  id,
 }: {
   title: string
   image: string | null
+  id: string
 }) {
   return (
     <Card className="h-[240px] w-[340px] overflow-hidden rounded-lg py-0 shadow-lg">
-      <CardContent className="p-0">
-        {image ? (
-          <Image
-            src={`https://image.tmdb.org/t/p/w500${image}`}
-            alt={title}
-            width={340}
-            height={200}
-            className="object-cover"
-          />
-        ) : (
-          <div className="h-[200px] w-[340px] bg-gray-200" />
-        )}
-        <div className="p-2">
-          <div className="mt-0">
-            <p className="text-base font-bold">{title}</p>
+      <Link href={`/movie/${id}`}>
+        <CardContent className="p-0">
+          {image ? (
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${image}`}
+              alt={title}
+              width={340}
+              height={200}
+              className="object-cover"
+            />
+          ) : (
+            <div className="h-[200px] w-[340px] bg-gray-200" />
+          )}
+          <div className="p-2">
+            <div className="mt-0">
+              <p className="text-base font-bold">{title}</p>
+            </div>
           </div>
-        </div>
-      </CardContent>
+        </CardContent>
+      </Link>
     </Card>
   )
 }
@@ -88,6 +99,7 @@ export function MovieHorizontalCard({
   original_title,
   className,
   isShadow = true,
+  id,
 }: {
   title: string
   image: string | null
@@ -96,6 +108,7 @@ export function MovieHorizontalCard({
   original_title: string
   className?: string
   isShadow?: boolean
+  id: string
 }) {
   return (
     // <Card className="h-[141px] overflow-hidden rounded-lg py-0">
@@ -105,32 +118,36 @@ export function MovieHorizontalCard({
         isShadow && 'shadow-lg'
       )}
     >
-      <CardContent className={cn('flex items-center gap-4 p-0', className)}>
-        {image ? (
-          <Image
-            src={`https://image.tmdb.org/t/p/w500${image}`}
-            alt={title}
-            width={94}
-            height={141}
-            className="h-[141px] w-[94px] object-cover"
-          />
-        ) : (
-          <div className="h-[141px] min-w-[94px] bg-gray-200" />
-        )}
-        <div className="flex flex-col gap-2">
-          <h3>
-            <span className="text-lg font-bold">{title}</span>
-            <span className="text-muted-foreground ml-2 text-sm">
-              {original_title !== title ? `(${original_title})` : ''}
-            </span>
-          </h3>
-          <p className="text-muted-foreground text-sm">{release_date}</p>
-          <p className="text-sm">
-            {overview.length > 200 ? overview.slice(0, 200) + '...' : overview}
-            {/* {overview} */}
-          </p>
-        </div>
-      </CardContent>
+      <Link href={`/movie/${id}`}>
+        <CardContent className={cn('flex items-center gap-4 p-0', className)}>
+          {image ? (
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${image}`}
+              alt={title}
+              width={94}
+              height={141}
+              className="h-[141px] w-[94px] object-cover"
+            />
+          ) : (
+            <div className="h-[141px] min-w-[94px] bg-gray-200" />
+          )}
+          <div className="flex flex-col gap-2">
+            <h3>
+              <span className="text-lg font-bold">{title}</span>
+              <span className="text-muted-foreground ml-2 text-sm">
+                {original_title !== title ? `(${original_title})` : ''}
+              </span>
+            </h3>
+            <p className="text-muted-foreground text-sm">{release_date}</p>
+            <p className="text-sm">
+              {overview.length > 200
+                ? overview.slice(0, 200) + '...'
+                : overview}
+              {/* {overview} */}
+            </p>
+          </div>
+        </CardContent>
+      </Link>
     </Card>
   )
 }
@@ -146,6 +163,7 @@ export function MovieReviewCard({
   comment_date,
   avatar_url,
   username,
+  id,
 }: {
   title: string
   image: string | null
@@ -157,12 +175,15 @@ export function MovieReviewCard({
   comment_date: string
   avatar_url: string
   username: string
+  id: string
 }) {
+  const truncatedComment = useTruncateText(comment, 200)
+
   return (
     <Card className="shadow-lg">
       <CardContent>
         <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
+          <Link href={`/movie/${id}`} className="flex gap-4">
             {image ? (
               <Image
                 src={`https://image.tmdb.org/t/p/w500${image}`}
@@ -188,7 +209,7 @@ export function MovieReviewCard({
                   : overview}
               </p>
             </div>
-          </div>
+          </Link>
           <div className="bg-secondary flex flex-col gap-2 rounded-lg p-5">
             <div className="flex items-center gap-2">
               <Avatar className="border-ring size-5 border">
@@ -223,11 +244,7 @@ export function MovieReviewCard({
             </div>
             <div className="flex flex-col gap-1">
               <p className="font-bold">Comment:</p>
-              {comment.length > 200 ? (
-                <div className="">{truncateText(comment, 200)}</div>
-              ) : (
-                <p className="">{comment}</p>
-              )}
+              <div className="">{truncatedComment}</div>
             </div>
           </div>
         </div>
@@ -236,8 +253,14 @@ export function MovieReviewCard({
   )
 }
 
-function truncateText(text: string, maxLength: number) {
+function useTruncateText(text: string, maxLength: number) {
   const [isTruncated, setIsTruncated] = useState(true)
+
+  // If text is shorter than maxLength, just return the text without truncation controls
+  if (text.length <= maxLength) {
+    return <p>{text}</p>
+  }
+
   return (
     <div className="flex flex-col gap-2">
       {isTruncated ? text.slice(0, maxLength) + '...' : text}

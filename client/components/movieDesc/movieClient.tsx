@@ -88,6 +88,7 @@ export default function MovieDescComp({ id }: { id: string }) {
             title={movie.original_title}
             rating={movie.vote_average}
             image={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            id={id}
           />
           <div className="mt-6" />
           <Dialog>

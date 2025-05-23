@@ -43,6 +43,7 @@ export default async function SearchPage(props: {
                 image={result.poster_path}
                 release_date={result.release_date}
                 overview={result.overview}
+                id={result.id.toString()}
               />
             ))}
           </div>

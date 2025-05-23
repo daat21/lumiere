@@ -129,6 +129,7 @@ export default async function ActivityTab() {
                   overview={activity.movie_data.overview}
                   original_title={activity.movie_data.original_title}
                   isShadow={false}
+                  id={activity.movie_id}
                 />
               </div>
             </div>
@@ -171,6 +172,7 @@ export default async function ActivityTab() {
                   overview={activity.movie_data.overview}
                   original_title={activity.movie_data.original_title}
                   isShadow={false}
+                  id={activity.movie_id}
                 />
               </div>
             </>
