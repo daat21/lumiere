@@ -83,6 +83,7 @@ export function MovieHorizontalCard({
   overview,
   original_title,
   className,
+  isShadow = true,
 }: {
   title: string
   image: string | null
@@ -90,9 +91,16 @@ export function MovieHorizontalCard({
   overview: string
   original_title: string
   className?: string
+  isShadow?: boolean
 }) {
   return (
-    <Card className="h-[141px] overflow-hidden rounded-lg py-0 shadow-lg">
+    // <Card className="h-[141px] overflow-hidden rounded-lg py-0">
+    <Card
+      className={cn(
+        'h-[141px] overflow-hidden rounded-lg py-0',
+        isShadow && 'shadow-lg'
+      )}
+    >
       <CardContent className={cn('flex items-center gap-4 p-0', className)}>
         {image ? (
           <Image
