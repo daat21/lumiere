@@ -1,7 +1,11 @@
+'use client'
+
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Star, Bookmark } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { useState } from 'react'
 
 export function MovieCard({
   title,
@@ -140,6 +144,8 @@ export function MovieReviewCard({
   rating,
   comment,
   comment_date,
+  avatar_url,
+  username,
 }: {
   title: string
   image: string | null
@@ -149,6 +155,8 @@ export function MovieReviewCard({
   rating: number
   comment: string
   comment_date: string
+  avatar_url: string
+  username: string
 }) {
   return (
     <Card className="shadow-lg">
@@ -161,7 +169,7 @@ export function MovieReviewCard({
                 alt={title}
                 width={80}
                 height={80}
-                className="h-[80px] w-[80px] rounded-full object-cover"
+                className="h-[80px] w-[80px] rounded-2xl object-cover"
               />
             ) : (
               <div className="h-[80px] w-[80px] rounded-full bg-gray-200" />
@@ -169,7 +177,7 @@ export function MovieReviewCard({
             <div className="">
               <h3>
                 <span className="font-bold">{title}</span>
-                <span className="text-muted-foreground ml-2">
+                <span className="text-muted-foreground ml-2 text-sm">
                   {original_title !== title ? `(${original_title})` : ''}
                 </span>
               </h3>
@@ -182,6 +190,20 @@ export function MovieReviewCard({
             </div>
           </div>
           <div className="bg-secondary flex flex-col gap-2 rounded-lg p-5">
+            <div className="flex items-center gap-2">
+              <Avatar className="border-ring size-5 border">
+                <AvatarImage src={avatar_url} alt={username} />
+                <AvatarFallback>{username?.slice(0, 2)}</AvatarFallback>
+              </Avatar>
+              <p className="text-muted-foreground text-sm">{username}</p>
+              <p className="text-muted-foreground ml-auto text-sm">
+                {new Date(comment_date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
+            </div>
             <div className="flex items-center gap-1 font-bold">
               Rating: {rating}
               <div className="flex items-center gap-0">
@@ -201,18 +223,30 @@ export function MovieReviewCard({
             </div>
             <div className="flex flex-col gap-1">
               <p className="font-bold">Comment:</p>
-              <p className="">{comment}</p>
+              {comment.length > 200 ? (
+                <div className="">{truncateText(comment, 200)}</div>
+              ) : (
+                <p className="">{comment}</p>
+              )}
             </div>
-            <p className="text-muted-foreground ml-auto text-sm">
-              {new Date(comment_date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </p>
           </div>
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+function truncateText(text: string, maxLength: number) {
+  const [isTruncated, setIsTruncated] = useState(true)
+  return (
+    <div className="flex flex-col gap-2">
+      {isTruncated ? text.slice(0, maxLength) + '...' : text}
+      <button
+        className="text-muted-foreground hover:text-primary ml-auto text-sm hover:underline"
+        onClick={() => setIsTruncated(!isTruncated)}
+      >
+        {isTruncated ? 'Read more' : 'Read less'}
+      </button>
+    </div>
   )
 }

@@ -1,20 +1,8 @@
 import { getMovieDetailsByIds } from '@/lib/tmdb'
 import { MovieReviewCard } from '../home/MovieCard'
 import { ReviewsFilter } from './ReviewsFilter'
-
-const reviews = [
-  {
-    _id: '683047d891343991b6f8abd4',
-    rating: 4,
-    comment: 'Great movie with amazing performances!',
-    movie_id: '100',
-    movie_title: 'Lock, Stock and Two Smoking Barrels',
-    user_id: '682e9cd51353f7a17e5c93a4',
-    username: 'test1310',
-    created_at: '2025-05-23T19:33:04.977000',
-    updated_at: null,
-  },
-]
+import { getCurrentUser } from '@/lib/server/user/getCurrentUser'
+import { getCurrentUserReviews } from '@/lib/server/user/getCurrentUserReviews'
 
 interface MovieData {
   id: number
@@ -42,8 +30,11 @@ interface ActivityWithMovieData {
 }
 
 export default async function ReviewsTab() {
+  const user = await getCurrentUser()
+  const reviews = await getCurrentUserReviews()
+
   const reviewsWithMovieData: ActivityWithMovieData[] = await Promise.all(
-    reviews.map(async review => {
+    reviews.map(async (review: ActivityWithMovieData) => {
       const movie_data = await getMovieDetailsByIds(review.movie_id)
       return {
         ...review,
@@ -73,6 +64,8 @@ export default async function ReviewsTab() {
               rating={review.rating}
               comment={review.comment}
               comment_date={review.created_at}
+              avatar_url={user?.avatar_url || ''}
+              username={user?.username || ''}
             />
           </div>
         ))}
