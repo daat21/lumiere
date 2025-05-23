@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ActivityTab from './ActivityTab'
+import ReviewsTab from './ReviewsTab'
 
 export default function ActivityContainer() {
   return (
@@ -21,7 +22,9 @@ export default function ActivityContainer() {
       <TabsContent value="activity">
         <ActivityTab />
       </TabsContent>
-      <TabsContent value="reviews">Change your password here.</TabsContent>
+      <TabsContent value="reviews">
+        <ReviewsTab />
+      </TabsContent>
     </Tabs>
   )
 }

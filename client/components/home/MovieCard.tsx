@@ -130,3 +130,89 @@ export function MovieHorizontalCard({
     </Card>
   )
 }
+
+export function MovieReviewCard({
+  title,
+  image,
+  release_date,
+  overview,
+  original_title,
+  rating,
+  comment,
+  comment_date,
+}: {
+  title: string
+  image: string | null
+  release_date: string
+  overview: string
+  original_title: string
+  rating: number
+  comment: string
+  comment_date: string
+}) {
+  return (
+    <Card className="shadow-lg">
+      <CardContent>
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            {image ? (
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${image}`}
+                alt={title}
+                width={80}
+                height={80}
+                className="h-[80px] w-[80px] rounded-full object-cover"
+              />
+            ) : (
+              <div className="h-[80px] w-[80px] rounded-full bg-gray-200" />
+            )}
+            <div className="">
+              <h3>
+                <span className="font-bold">{title}</span>
+                <span className="text-muted-foreground ml-2">
+                  {original_title !== title ? `(${original_title})` : ''}
+                </span>
+              </h3>
+              <p className="text-muted-foreground text-sm">{release_date}</p>
+              <p className="text-sm">
+                {overview.length > 200
+                  ? overview.slice(0, 200) + '...'
+                  : overview}
+              </p>
+            </div>
+          </div>
+          <div className="bg-secondary flex flex-col gap-2 rounded-lg p-5">
+            <div className="flex items-center gap-1 font-bold">
+              Rating: {rating}
+              <div className="flex items-center gap-0">
+                {Array.from({ length: rating }).map((_, index) => (
+                  <Star
+                    key={index}
+                    className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                  />
+                ))}
+                {Array.from({ length: 5 - rating }).map((_, index) => (
+                  <Star
+                    key={index}
+                    className="h-4 w-4 fill-gray-200 text-gray-200"
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="font-bold">Comment:</p>
+              <p className="">{comment}</p>
+            </div>
+            <p className="text-muted-foreground ml-auto text-sm">
+              {new Date(comment_date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

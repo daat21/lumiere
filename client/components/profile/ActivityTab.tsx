@@ -87,7 +87,7 @@ export default async function ActivityTab() {
   )
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="mt-10 flex flex-col gap-10">
       {activitiesWithMovieData.map(activity => (
         <Card key={activity.movie_id} className="p-6 shadow-lg">
           {activity.type === 'review' && (
