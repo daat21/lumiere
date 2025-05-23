@@ -2,7 +2,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ActivityTab from './ActivityTab'
 import ReviewsTab from './ReviewsTab'
 
-export default function ActivityContainer() {
+interface ActivityContainerProps {
+  searchParams?: Promise<{ sort_by?: string }>
+}
+
+export default function ActivityContainer({
+  searchParams,
+}: ActivityContainerProps) {
   return (
     <Tabs defaultValue="activity">
       <TabsList className="text-muted-foreground inline-flex h-9 w-full items-center justify-start rounded-none border-b bg-transparent p-0">
@@ -23,7 +29,7 @@ export default function ActivityContainer() {
         <ActivityTab />
       </TabsContent>
       <TabsContent value="reviews">
-        <ReviewsTab />
+        <ReviewsTab searchParams={searchParams} />
       </TabsContent>
     </Tabs>
   )

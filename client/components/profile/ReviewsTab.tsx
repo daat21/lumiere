@@ -29,9 +29,32 @@ interface ActivityWithMovieData {
   movie_data: MovieData
 }
 
-export default async function ReviewsTab() {
+interface ReviewsTabProps {
+  searchParams?: Promise<{ sort_by?: string }>
+}
+
+export default async function ReviewsTab({ searchParams }: ReviewsTabProps) {
   const user = await getCurrentUser()
-  const reviews = await getCurrentUserReviews()
+  const params = await searchParams
+  const sortBy = params?.sort_by || 'created_at'
+  const reviews = await getCurrentUserReviews(sortBy)
+
+  // Handle case where reviews is null or undefined
+  if (!reviews || !Array.isArray(reviews)) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <ReviewsFilter />
+          <p className="text-sm">
+            Total <span className="font-bold">0</span> reviews
+          </p>
+        </div>
+        <div className="flex flex-col gap-10">
+          <p className="text-muted-foreground text-center">No reviews found.</p>
+        </div>
+      </div>
+    )
+  }
 
   const reviewsWithMovieData: ActivityWithMovieData[] = await Promise.all(
     reviews.map(async (review: ActivityWithMovieData) => {
