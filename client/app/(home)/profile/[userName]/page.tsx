@@ -36,7 +36,7 @@ export default async function Profile() {
       <div className="mr-20 ml-10 flex flex-col  border-amber-100">
         <div className="flex flex-row mt-2 items-center  border-amber-100">
           <Avatar className="w-13 h-13">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarImage src={`${user.avatar_url}`} alt="@shadcn" />
             <AvatarFallback>IMG</AvatarFallback>
           </Avatar>
           <h2 className="ml-2 font-bold">
