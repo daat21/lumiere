@@ -23,7 +23,7 @@ export function ChatInput() {
 
   const handleSend = () => {
     if (message.trim()) {
-      console.log('Send Message:', message)
+      // console.log('Send Message:', message)
       setMessage('')
     }
   }
