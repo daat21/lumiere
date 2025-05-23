@@ -21,8 +21,8 @@ export function MovieCard({
 }) {
   return (
     <Card className="h-[420px] w-[200px] overflow-hidden rounded-lg py-0 shadow-lg">
-      <Link href={`/movie/${id}`}>
-        <CardContent className="p-0">
+      <CardContent className="p-0">
+        <Link href={`/movie/${id}`}>
           {image ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${image}`}
@@ -34,24 +34,24 @@ export function MovieCard({
           ) : (
             <div className="h-[300px] w-[200px] bg-gray-200" />
           )}
-          <div className="p-2">
-            <div className="mt-1 flex items-center justify-between">
-              <div className="ml-1/2 flex items-center gap-1 p-1">
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                <span className="text-sm font-semibold">
-                  {rating.toFixed(1)}
-                </span>
-              </div>
-              <button className="group rounded-full p-1">
-                <Bookmark className="h-5 w-5 text-green-500 group-hover:fill-green-500 group-hover:text-green-500" />
-              </button>
+        </Link>
+        <div className="p-2">
+          <div className="mt-1 flex items-center justify-between">
+            <div className="ml-1/2 flex items-center gap-1 p-1">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
             </div>
-            <div className="mx-2 mt-4 text-center">
-              <p className="text-base font-bold">{title}</p>
-            </div>
+            <button className="group rounded-full p-1">
+              <Bookmark className="h-5 w-5 text-green-500 group-hover:fill-green-500 group-hover:text-green-500" />
+            </button>
           </div>
-        </CardContent>
-      </Link>
+          <div className="mx-2 mt-4 text-center">
+            <Link href={`/movie/${id}`}>
+              <p className="text-base font-bold">{title}</p>
+            </Link>
+          </div>
+        </div>
+      </CardContent>
     </Card>
   )
 }
