@@ -1,6 +1,5 @@
 'use client';
 
-import { MovieBackdropCardSkeleton } from '@/components/ui/skeleton/MovieBackdropCardSkeleton'
 import { MovieCard } from '@/components/home/MovieCard'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,17 +12,20 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
 import ReviewScrollArea from '@/components/movieDesc/reviewScrollArea'
 import { Slider } from '@/components/ui/slider'
-import ReviewSlider from '@/components/movieDesc/reviewSlider'
-import { useEffect, useState } from 'react';
+//import ReviewSlider from '@/components/movieDesc/reviewSlider'
+import { useEffect, useState, useActionState } from 'react';
 import { getMovieDetailsByIds,
   getCreditsByMovieId,
   getVideosByMovieId,
  } from '@/lib/tmdb';
+import { cn } from '@/lib/utils';
+import { useFormStatus } from 'react-dom';
+import {toast} from 'sonner'
+import { postReview } from '@/lib/server/user/postReview';
 
 interface MovieDetails {
   original_title: string,
@@ -55,7 +57,9 @@ export default function MovieDescComp({ id }: { id: string}) {
   const [credits, setCredits] = useState<MovieCredits|null>(null);
   const [videos, setVideos] = useState<MovieVideos|null>(null);
   const [loading, setLoading] = useState(true)
-
+  const [value, setValue] = useState([5]);
+  const [reviewState, formAction]=useActionState(postReview, undefined)
+  const { pending } = useFormStatus()
   useEffect(() => {
     getMovieDetailsByIds(id)
     .then((movie) => {
@@ -76,6 +80,19 @@ export default function MovieDescComp({ id }: { id: string}) {
     });
   }, [id])
 
+  useEffect(()=> {
+    if(reviewState?.success){
+      toast.success(reviewState.message || 'Review is posted!')
+      setTimeout(()=>window.location.reload(), 1500)
+    }else if(reviewState?.code == 401)
+    {toast.error(reviewState.message || 'User is not logged in!')
+      setTimeout(()=>window.location.href=`http://localhost:3000/login`, 1500)
+    }
+    else if(reviewState?.code == 400){
+      toast.error(reviewState.message || 'Failure while posting review...')
+    }
+  }, [reviewState])
+
   if (loading) return <p>Please wait! Loading movie details {":)"}</p>
   if (!movie) return <p>No data found, sorry! {":(}"}</p>
   
@@ -93,7 +110,7 @@ export default function MovieDescComp({ id }: { id: string}) {
           <div className="mt-6" />
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Reviews</Button>
+              <Button>Post a review</Button>
             </DialogTrigger>
             <DialogContent className="w-1/2 sm:max-w-[none]">
               <DialogHeader>
@@ -103,28 +120,46 @@ export default function MovieDescComp({ id }: { id: string}) {
                   done.
                 </DialogDescription>
               </DialogHeader>
+              <form action={formAction}>
+                <input type="hidden" name="movieId" value={id} />
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
+                  <Label htmlFor="comment" className="text-right">
                     Review
                   </Label>
                   <Textarea
-                    id="name"
+                    id="comment"
+                    name="comment"
                     placeholder="Enter your review here..."
                     className="col-span-10"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
+                  <Label htmlFor="rating" className="text-right">
                     Ratings
                   </Label>
-                  <ReviewSlider />
-                </div>
+                  {/*<ReviewSlider />*/}
+                  <div className="flex justify-center gap-4 w-full">
+                      <Slider
+                          name="rating"
+                          defaultValue={value}
+                          onValueChange={setValue}
+                          max={10}
+                          step={0.1}
+                          className={cn("w-[60%]")}
+                      />
+                      <div className="px-3 py-1 border rounded text-sm font-medium">
+                          {value[0]}
+                      </div>
+                      </div>
+                  </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Post</Button>
+                <Button type="submit" disabled={pending}>
+                  {pending ? 'Posting...' : 'Post'}
+                </Button>
               </DialogFooter>
-              <ReviewScrollArea id={id}/>
+              </form>
             </DialogContent>
           </Dialog>
         </div>
@@ -162,6 +197,9 @@ export default function MovieDescComp({ id }: { id: string}) {
                 Teaser
               </Link>
             </Button>
+          </div>
+          <div className="mt-4 flex flex-col border-amber-100">
+            <ReviewScrollArea id={id}/>
           </div>
         </div>
       </div>

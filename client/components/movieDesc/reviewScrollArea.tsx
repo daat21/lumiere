@@ -34,9 +34,9 @@ export default function ReviewScrollArea({id}: {id:string}) {
   if (!reviews) return <p>No reviews found, sorry! {":(}"}</p>
 
   return (
-    <ScrollArea className="h-72 w-full rounded-md border">
+    <ScrollArea className="w-full rounded-md border">
       <div className="p-4">
-        <h4 className="mb-4 text-xl font-medium leading-none">Reviews by other users</h4>
+        <h4 className="mb-4 text-xl font-medium leading-none">User reviews</h4>
         {reviews.map((review) => (
           <>
             <div className="flex flex-col">
