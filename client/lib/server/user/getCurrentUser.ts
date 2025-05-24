@@ -12,5 +12,6 @@ export const getCurrentUser = async () => {
     },
   })
   const data = await res.json()
+
   return data
 }

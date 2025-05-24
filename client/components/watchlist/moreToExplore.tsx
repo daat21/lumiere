@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { MovieBackdropCard } from '@/components/home/MovieCard'
 import { getMoviesByGenre } from '@/lib/tmdb'
@@ -15,6 +15,10 @@ interface Movie {
   id: number
   title: string
   backdrop_path: string | null
+  genres: {
+    id:string,
+    name: string
+  }[]
 }
 
 export function MoreToExplore({
@@ -26,11 +30,12 @@ export function MoreToExplore({
 }) {
   const [genres] = useState<Genre[]>(initialGenres)
   const [movies, setMovies] = useState<Movie[]>(initialMovies)
+  useEffect(()=>{setMovies(initialMovies)},[initialMovies])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedGenreId, setSelectedGenreId] = useState<number | null>(null)
 
-  const handleGenreClick = async (genreId: number) => {
+  const handleGenreClick =  (genreId: number) => {
     if (genreId === selectedGenreId) {
       setSelectedGenreId(null)
       setMovies(initialMovies)
@@ -44,8 +49,13 @@ export function MoreToExplore({
     setError(null)
 
     try {
-      const fetchedMovies = await getMoviesByGenre(String(genreId))
-      setMovies(fetchedMovies.slice(0, 12))
+      const fetchedMovies = initialMovies.filter((movie: Movie) => {
+        if (movie.genres.find((genre) => genre.id == String(genreId)))
+          {console.log(movie)
+            return movie}
+      })
+      console.log(fetchedMovies)
+      setMovies(fetchedMovies?? [])
     } catch (err) {
       console.error('Failed to fetch movies by genre:', err)
       setError('Failed to load movies for this genre.')

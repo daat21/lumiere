@@ -22,10 +22,12 @@ interface Person {
   name: string
 }
 
-export function SearchBar() {
+export function SearchBar({movies}: {
+  movies: Movie[]
+}) {
   const [query, setQuery] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([])
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>(movies)
   const [movieResults, setMovieResults] = useState<Movie[]>([])
   const [personResults, setPersonResults] = useState<Person[]>([])
   const [isLoadingTrending, setIsLoadingTrending] = useState(false)
