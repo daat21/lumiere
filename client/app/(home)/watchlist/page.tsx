@@ -23,7 +23,7 @@ interface MovieDetails {
 
 export default async function Watchlist() {
   const genresListPromise = getGenresList()
-  const userWatchlist = await getCurrentUserInfo().then((data) => data.watchlists[0])
+  const userWatchlist = await getCurrentUserInfo().then((data) => data?.watchlists?.[0]?.movies ?? [])
                                                   .then((watchlistMovies) => watchlistMovies.movies.map((movie: { movie_id: string }) => {
                                                     return movie.movie_id
                                                   }))
@@ -39,6 +39,7 @@ export default async function Watchlist() {
                                                           }))
                                                           return required_details;
                                                         })
+                                                  .catch(()=>[])
                               
   const [genresList] = await Promise.all([
     genresListPromise
