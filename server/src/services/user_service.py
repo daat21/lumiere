@@ -358,3 +358,14 @@ class UserService:
 
         # Reset to default avatar
         await self.user_repository.update(user_id, {"avatar_url": self.default_avatar_url})
+
+    async def update_bio(self, user_id: str, bio: str) -> str:
+        """Update user bio"""
+        # Check if user exists
+        user = await self.get_user_by_id(user_id)
+
+        # Update MongoDB directly
+        await self.user_repository.update(user_id, {"bio": bio})
+        return bio
+
+    

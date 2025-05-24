@@ -56,7 +56,7 @@ export function DiscoverPagination({
       }
     } else {
       let startPage = Math.max(1, currentPage - 3)
-      let endPage = Math.min(totalPages, startPage + 5)
+      const endPage = Math.min(totalPages, startPage + 5)
 
       if (endPage - startPage < 5 && startPage > 1) {
         startPage = Math.max(1, endPage - 5)

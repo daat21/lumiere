@@ -14,11 +14,9 @@ import { deleteSession } from '@/lib/server/user/deleteSession'
 export default function UserDropdownMenu({
   avatarUrl,
   username,
-  id,
 }: {
   avatarUrl?: string
   username?: string
-  id: string
 }) {
   return (
     <DropdownMenu>
@@ -33,7 +31,7 @@ export default function UserDropdownMenu({
           Your Account
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href={`/profile/${id}`}>
+        <Link href="/profile">
           <DropdownMenuItem>
             <UserRoundPen className="h-4 w-4" />
             Profile

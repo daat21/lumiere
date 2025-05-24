@@ -24,6 +24,7 @@ export function MovieResults({ movies }: { movies: Movie[] }) {
           title={movie.title}
           rating={movie.vote_average}
           image={movie.poster_path}
+          id={movie.id.toString()}
         />
       ))}
     </div>

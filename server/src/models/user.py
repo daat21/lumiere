@@ -4,7 +4,14 @@ from typing import Optional, Dict, List, Any
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
 USERNAME_REGEX = r'^[a-zA-Z0-9_]{3,20}$'
-PASSWORD_REGEX = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
+PASSWORD_REGEX = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$'
+
+def validate_password(password: str) -> str:
+    """Validate password format"""
+    if not re.match(PASSWORD_REGEX, password):
+        raise ValueError(
+            'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+    return password
 
 class UserCreate(BaseModel):
     """Model for creating a new user"""
@@ -22,10 +29,7 @@ class UserCreate(BaseModel):
 
     @field_validator("password")
     def password_validator(cls, v):
-        if not re.match(PASSWORD_REGEX, v):
-            raise ValueError(
-                'Password must be at least 8 characters long and contain at least one letter, one number, and one special character (@$!%*#?&)')
-        return v
+        return validate_password(v)
     
     @field_validator("confirm_password")
     def confirm_password_validator(cls, v, info):
@@ -63,9 +67,8 @@ class UserUpdate(BaseModel):
     
     @field_validator("new_password")
     def password_validator(cls, v):
-        if not re.match(PASSWORD_REGEX, v):
-            raise ValueError(
-                'Password must be at least 8 characters long and contain at least one letter, one number, and one special character (@$!%*#?&)')
+        if v is not None:  # Only validate if new password is provided
+            return validate_password(v)
         return v
     
     @field_validator("confirm_password")
@@ -73,7 +76,6 @@ class UserUpdate(BaseModel):
         if v != info.data.get("new_password"):
             raise ValueError("Passwords do not match.")
         return v
-
 
 class User(BaseModel):
     """User model"""

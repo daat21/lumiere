@@ -173,7 +173,29 @@ async def delete_avatar(
             detail=f"Error resetting avatar: {str(e)}"
         )
 
-
+@router.put("/bio", status_code=status.HTTP_200_OK)
+async def update_bio(
+    bio: str,
+    current_user: User = Depends(get_current_user),
+    user_service: UserService = Depends(get_user_service)
+):
+    """
+    Update user bio
+    """
+    try:
+        bio = await user_service.update_bio(str(current_user.id), bio)
+        return {"bio": bio}
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating bio: {str(e)}"
+        )
+    
 # Backend management and administrator operations
 
 # Get user information by ID
