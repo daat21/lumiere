@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 
 export const getCurrentUserInfo = async () => {
-  /*const cookieStore = await cookies()
+  const cookieStore = await cookies()
   const accessToken = cookieStore.get('access_token')
   if (!accessToken) return null
   const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/users/me', {
@@ -12,9 +12,8 @@ export const getCurrentUserInfo = async () => {
     },
   })
   const data = await res.json()
-*/
 
-  const data = {
+  /*const data = {
   "id": "682b0526c3ccd3a52710734f",
   "username": "emmanuel",
   "email": "emmanuel@icloud.com",
@@ -81,6 +80,6 @@ export const getCurrentUserInfo = async () => {
       "updated_at": null
     }
   ]
-  }
+  }*/
   return data
 }
