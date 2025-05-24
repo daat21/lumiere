@@ -16,11 +16,11 @@ export default async function middleware(request: NextRequest) {
     await updateSession()
   }
 
-  if (isProtectedRoute && !accessToken) {
+  /*if (isProtectedRoute && !accessToken) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  return NextResponse.next()
+  return NextResponse.next()*/
 }
 
 export const config = {
