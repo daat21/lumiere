@@ -9,11 +9,14 @@ export default async function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.includes(path)
 
   const cookieStore = await cookies()
-  const accessToken = cookieStore.get('access_token')?.value
+  let accessToken = cookieStore.get('access_token')?.value
   const refreshToken = cookieStore.get('refresh_token')?.value
 
   if (!accessToken && refreshToken) {
-    await updateSession()
+    const result = await updateSession()
+    if (result) {
+      accessToken = result.access_token
+    }
   }
 
   if (isProtectedRoute && !accessToken) {
