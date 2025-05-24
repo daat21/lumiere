@@ -39,12 +39,12 @@ export function DropdownMenuComponent() {
             <span className="text-lg font-bold">Profile</span>
           </DropdownMenuItem>
         </Link>
-        <Link href="/settings">
+        {/* <Link href="/settings">
           <DropdownMenuItem>
             <Settings className="h-6 w-6" />
             <span className="text-lg font-bold">Settings</span>
           </DropdownMenuItem>
-        </Link>
+        </Link> */}
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -1,11 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Pencil } from 'lucide-react'
 import { getCurrentUser } from '@/lib/server/user/getCurrentUser'
-import { Button } from '../ui/button'
+import { EditProfile } from './settings/EditProfile'
+import { EditAccount } from './settings/EditAccount'
 
 export async function ProfileContainerV2() {
   const user = await getCurrentUser()
-  // console.log(user)
 
   return (
     <div className="relative flex items-center gap-5">
@@ -34,10 +33,14 @@ export async function ProfileContainerV2() {
               : 'N/A'}
           </p>
         </div>
-        <Button variant="outline" className="mt-4">
+        {/* <Button variant="outline" className="mt-4">
           <Pencil className="h-4 w-4" />
           Edit Profile
-        </Button>
+        </Button> */}
+        <div className="mt-4 flex gap-4">
+          <EditProfile user={user} />
+          <EditAccount email={user?.email} />
+        </div>
       </div>
     </div>
   )
