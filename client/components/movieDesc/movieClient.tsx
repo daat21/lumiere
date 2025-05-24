@@ -18,15 +18,16 @@ import ReviewScrollArea from '@/components/movieDesc/reviewScrollArea'
 import { Slider } from '@/components/ui/slider'
 
 //import ReviewSlider from '@/components/movieDesc/reviewSlider'
-import { useEffect, useState, useActionState } from 'react';
-import { getMovieDetailsByIds,
+import { useEffect, useState, useActionState } from 'react'
+import {
+  getMovieDetailsByIds,
   getCreditsByMovieId,
   getVideosByMovieId,
- } from '@/lib/tmdb';
-import { cn } from '@/lib/utils';
-import { useFormStatus } from 'react-dom';
-import {toast} from 'sonner'
-import { postReview } from '@/lib/server/user/postReview';
+} from '@/lib/tmdb'
+import { cn } from '@/lib/utils'
+import { useFormStatus } from 'react-dom'
+import { toast } from 'sonner'
+import { postReview } from '@/lib/server/user/postReview'
 
 interface MovieDetails {
   original_title: string
@@ -56,8 +57,8 @@ export default function MovieDescComp({ id }: { id: string }) {
   const [credits, setCredits] = useState<MovieCredits | null>(null)
   const [videos, setVideos] = useState<MovieVideos | null>(null)
   const [loading, setLoading] = useState(true)
-  const [value, setValue] = useState([5]);
-  const [reviewState, formAction]=useActionState(postReview, undefined)
+  const [value, setValue] = useState([5])
+  const [reviewState, formAction] = useActionState(postReview, undefined)
   const { pending } = useFormStatus()
   useEffect(() => {
     getMovieDetailsByIds(id)
@@ -77,24 +78,26 @@ export default function MovieDescComp({ id }: { id: string }) {
       })
   }, [id])
 
-  useEffect(()=> {
-    if(reviewState?.success){
+  useEffect(() => {
+    if (reviewState?.success) {
       toast.success(reviewState.message || 'Review is posted!')
-      setTimeout(()=>window.location.reload(), 1500)
-    }else if(reviewState?.code == 401)
-    {toast.error(reviewState.message || 'User is not logged in!')
-      setTimeout(()=>window.location.href=`http://localhost:3000/login`, 1500)
-    }
-    else if(reviewState?.code == 400){
+      setTimeout(() => window.location.reload(), 1500)
+    } else if (reviewState?.code == 401) {
+      toast.error(reviewState.message || 'User is not logged in!')
+      setTimeout(
+        () => (window.location.href = `http://localhost:3000/login`),
+        1500
+      )
+    } else if (reviewState?.code == 400) {
       toast.error(reviewState.message || 'Failure while posting review...')
     }
   }, [reviewState])
 
-  if (loading) return <p>Please wait! Loading movie details {":)"}</p>
-  if (!movie) return <p>No data found, sorry! {":(}"}</p>
-  
+  if (loading) return <p>Please wait! Loading movie details {':)'}</p>
+  if (!movie) return <p>No data found, sorry! {':(}'}</p>
+
   console.log(movie)
-      
+
   return (
     <div>
       <h1 className="mb-8 text-3xl">
@@ -117,49 +120,49 @@ export default function MovieDescComp({ id }: { id: string }) {
               <DialogHeader>
                 <DialogTitle>Reviews</DialogTitle>
                 <DialogDescription>
-                  Enter your review and ratings here. Click "Post" when you're
-                  done.
+                  Enter your review and ratings here. Click &quot;Post&quot;
+                  when you&apos;re done.
                 </DialogDescription>
               </DialogHeader>
               <form action={formAction}>
                 <input type="hidden" name="movieId" value={id} />
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="comment" className="text-right">
-                    Review
-                  </Label>
-                  <Textarea
-                    id="comment"
-                    name="comment"
-                    placeholder="Enter your review here..."
-                    className="col-span-10"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="rating" className="text-right">
-                    Ratings
-                  </Label>
-                  {/*<ReviewSlider />*/}
-                  <div className="flex justify-center gap-4 w-full">
-                      <Slider
-                          name="rating"
-                          defaultValue={value}
-                          onValueChange={setValue}
-                          max={10}
-                          step={0.1}
-                          className={cn("w-[60%]")}
-                      />
-                      <div className="px-3 py-1 border rounded text-sm font-medium">
-                          {value[0]}
-                      </div>
-                      </div>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="comment" className="text-right">
+                      Review
+                    </Label>
+                    <Textarea
+                      id="comment"
+                      name="comment"
+                      placeholder="Enter your review here..."
+                      className="col-span-10"
+                    />
                   </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit" disabled={pending}>
-                  {pending ? 'Posting...' : 'Post'}
-                </Button>
-              </DialogFooter>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="rating" className="text-right">
+                      Ratings
+                    </Label>
+                    {/*<ReviewSlider />*/}
+                    <div className="flex w-full justify-center gap-4">
+                      <Slider
+                        name="rating"
+                        defaultValue={value}
+                        onValueChange={setValue}
+                        max={10}
+                        step={0.1}
+                        className={cn('w-[60%]')}
+                      />
+                      <div className="rounded border px-3 py-1 text-sm font-medium">
+                        {value[0]}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit" disabled={pending}>
+                    {pending ? 'Posting...' : 'Post'}
+                  </Button>
+                </DialogFooter>
               </form>
             </DialogContent>
           </Dialog>
@@ -194,7 +197,7 @@ export default function MovieDescComp({ id }: { id: string }) {
             </Button>
           </div>
           <div className="mt-4 flex flex-col border-amber-100">
-            <ReviewScrollArea id={id}/>
+            <ReviewScrollArea id={id} />
           </div>
         </div>
       </div>

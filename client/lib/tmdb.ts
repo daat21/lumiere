@@ -113,7 +113,7 @@ const getMovieDetailsByIds = async (movie_id: string) => {
     options
   )
   const movie = await response.json()
-  return movie;
+  return movie
 }
 
 const getCreditsByMovieId = async (movie_id: string) => {
@@ -122,11 +122,18 @@ const getCreditsByMovieId = async (movie_id: string) => {
     options
   )
   const creditData = await response.json()
-  const castNames = creditData.cast?.slice(0,5).map((castMember: { name: any }) => castMember.name).join(', ')+', more...' || 'No cast information available'
-  const dirName = creditData.crew?.find((crewMember: { job: string }) => crewMember.job == 'Director')?.name || 'Director information not available'
+  const castNames =
+    creditData.cast
+      ?.slice(0, 5)
+      .map((castMember: { name: string }) => castMember.name)
+      .join(', ') + ', more...' || 'No cast information available'
+  const dirName =
+    creditData.crew?.find(
+      (crewMember: { job: string }) => crewMember.job == 'Director'
+    )?.name || 'Director information not available'
   return {
     castNames,
-    dirName
+    dirName,
   }
 }
 
@@ -136,35 +143,69 @@ const getVideosByMovieId = async (movie_id: string) => {
     options
   )
   const videoData = await response.json()
-  const trailerVideo = videoData.results?.find((videoResult: { site: string; name: string })=>videoResult.site == "YouTube" && videoResult.name.toLowerCase().includes('trailer'))
-  const teaserVideo = videoData.results?.find((videoResult: { site: string; name: string })=>videoResult.site == "YouTube" && videoResult.name.toLowerCase().includes('teaser'))
-  const trailerUrl = trailerVideo?`https://www.youtube.com/watch?v=${trailerVideo.key}`:'na'
-  const teaserUrl = teaserVideo?`https://www.youtube.com/watch?v=${teaserVideo.key}`:'na'
-  return {trailerUrl, teaserUrl}
+  const trailerVideo = videoData.results?.find(
+    (videoResult: { site: string; name: string }) =>
+      videoResult.site == 'YouTube' &&
+      videoResult.name.toLowerCase().includes('trailer')
+  )
+  const teaserVideo = videoData.results?.find(
+    (videoResult: { site: string; name: string }) =>
+      videoResult.site == 'YouTube' &&
+      videoResult.name.toLowerCase().includes('teaser')
+  )
+  const trailerUrl = trailerVideo
+    ? `https://www.youtube.com/watch?v=${trailerVideo.key}`
+    : 'na'
+  const teaserUrl = teaserVideo
+    ? `https://www.youtube.com/watch?v=${teaserVideo.key}`
+    : 'na'
+  return { trailerUrl, teaserUrl }
 }
 
-type movieReviews={
-  name:string;
-  comment:string;
-  rating: number | null;
+type movieReviews = {
+  id: string
+  name: string
+  comment: string
+  rating: number | null
 }
 
-const getMovieReviewsById = async (movie_id: string): Promise<movieReviews[]> => {
-  const response = await fetch(`http://127.0.0.1:8000/reviews/${movie_id}/reviews`, {
-    method: 'GET',
-  });
+const getMovieReviewsById = async (
+  movie_id: string
+): Promise<movieReviews[]> => {
+  const response = await fetch(
+    `http://127.0.0.1:8000/reviews/${movie_id}/reviews`,
+    {
+      method: 'GET',
+    }
+  )
   const reviewData = await response.json()
-  const userReviews: movieReviews[]=reviewData.user_reviews.map((review:any)=>({
-    name: review.username,
-    comment: review.comment,
-    rating: review.rating,
-  }));
-  const tmdbReviews: movieReviews[]=reviewData.tmdb_reviews.map((review:any)=>({
-    name: review.author,
-    comment: review.content,
-    rating: review.author_details?.rating?? null,
-  }));
-  return [...userReviews,...tmdbReviews];
+  const userReviews: movieReviews[] = reviewData.user_reviews.map(
+    (review: {
+      _id: string
+      username: string
+      comment: string
+      rating: number
+    }) => ({
+      id: review._id,
+      name: review.username,
+      comment: review.comment,
+      rating: review.rating,
+    })
+  )
+  const tmdbReviews: movieReviews[] = reviewData.tmdb_reviews.map(
+    (review: {
+      id: string
+      author: string
+      content: string
+      author_details: { rating: number }
+    }) => ({
+      id: review.id,
+      name: review.author,
+      comment: review.content,
+      rating: review.author_details?.rating ?? null,
+    })
+  )
+  return [...userReviews, ...tmdbReviews]
 }
 
 export {

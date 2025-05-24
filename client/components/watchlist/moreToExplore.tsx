@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { MovieBackdropCard } from '@/components/home/MovieCard'
-import { getMoviesByGenre } from '@/lib/tmdb'
 import { MovieBackdropCardSkeleton } from '../ui/skeleton/MovieBackdropCardSkeleton'
 
 interface Genre {
@@ -16,7 +15,7 @@ interface Movie {
   title: string
   backdrop_path: string | null
   genres: {
-    id:string,
+    id: string
     name: string
   }[]
 }
@@ -30,12 +29,14 @@ export function MoreToExplore({
 }) {
   const [genres] = useState<Genre[]>(initialGenres)
   const [movies, setMovies] = useState<Movie[]>(initialMovies)
-  useEffect(()=>{setMovies(initialMovies)},[initialMovies])
+  useEffect(() => {
+    setMovies(initialMovies)
+  }, [initialMovies])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedGenreId, setSelectedGenreId] = useState<number | null>(null)
 
-  const handleGenreClick =  (genreId: number) => {
+  const handleGenreClick = (genreId: number) => {
     if (genreId === selectedGenreId) {
       setSelectedGenreId(null)
       setMovies(initialMovies)
@@ -50,12 +51,13 @@ export function MoreToExplore({
 
     try {
       const fetchedMovies = initialMovies.filter((movie: Movie) => {
-        if (movie.genres.find((genre) => genre.id == String(genreId)))
-          {console.log(movie)
-            return movie}
+        if (movie.genres.find(genre => genre.id == String(genreId))) {
+          console.log(movie)
+          return movie
+        }
       })
       console.log(fetchedMovies)
-      setMovies(fetchedMovies?? [])
+      setMovies(fetchedMovies ?? [])
     } catch (err) {
       console.error('Failed to fetch movies by genre:', err)
       setError('Failed to load movies for this genre.')

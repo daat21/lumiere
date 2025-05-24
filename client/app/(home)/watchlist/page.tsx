@@ -1,15 +1,12 @@
-import { SearchBar } from '@/components/watchlist/searchBar'
-
 import { getGenresList, getMovieDetailsByIds } from '@/lib/tmdb'
-import { MoreToExplore } from '@/components/watchlist/moreToExplore'
 import { getCurrentUserInfo } from '@/lib/server/user/getCurrentUserInfo'
 import WatchlistClientSide from '@/components/watchlist/watchlistClientSide'
 
-interface RequiredDetailsProps {
-  id: string
-  title: string
-  backdrop_path: string
-}
+// interface RequiredDetailsProps {
+//   id: string
+//   title: string
+//   backdrop_path: string
+// }
 
 interface MovieDetails {
   id: number
