@@ -18,22 +18,23 @@ interface MovieDetails {
 export default async function Home() {
   const genresListPromise = getGenresList()
   const popularMoviesPromise = getPopularMovies()
-  const userWatchlist = await getCurrentUserInfo().then((data) => data.watchlists[0])
-                                                  .then((watchlistMovies) => watchlistMovies.movies.map((movie: { movie_id: string }) => {
-                                                    return movie.movie_id
-                                                  }))
-                                                  .then((movieIds) => Promise.all(movieIds.map(getMovieDetailsByIds)))
-                                                  .then((movieDetails: MovieDetails[]) => {
-                                                          const required_details = movieDetails.map((detail
-                                                            : MovieDetails
-                                                          ) => ({
-                                                            id: detail.id,
-                                                            title: detail.title,
-                                                            poster_path: detail.poster_path,
-                                                            vote_average: detail.vote_average
-                                                          }))
-                                                          return required_details;
-                                                        })
+  const userWatchlist = await getCurrentUserInfo().then((data) => data?.watchlists?.[0]?.movies ?? [])
+                                                    .then((watchlistMovies) => watchlistMovies.movies.map((movie: { movie_id: string }) => {
+                                                      return movie.movie_id
+                                                    }))
+                                                    .then((movieIds) => Promise.all(movieIds.map(getMovieDetailsByIds)))
+                                                    .then((movieDetails: MovieDetails[]) => {
+                                                            const required_details = movieDetails.map((detail
+                                                              : MovieDetails
+                                                            ) => ({
+                                                              id: detail.id,
+                                                              title: detail.title,
+                                                              poster_path: detail.poster_path,
+                                                              vote_average: detail.vote_average
+                                                            }))
+                                                            return required_details;
+                                                          })
+                                                    .catch(()=>[])
   const [genresList, popularMovies] = await Promise.all([
     genresListPromise,
     popularMoviesPromise,
