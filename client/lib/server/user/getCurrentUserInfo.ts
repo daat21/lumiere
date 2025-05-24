@@ -3,17 +3,17 @@
 import { cookies } from 'next/headers'
 
 export const getCurrentUserInfo = async () => {
-  // const cookieStore = await cookies()
-  // const accessToken = cookieStore.get('access_token')
-  // if (!accessToken) return null
-  // const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/users/me', {
-  //   headers: {
-  //     Authorization: `Bearer ${accessToken.value}`,
-  //   },
-  // })
-  // const data = await res.json()
+   const cookieStore = await cookies()
+   const accessToken = cookieStore.get('access_token')
+   if (!accessToken) return null
+   const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/users/me', {
+     headers: {
+       Authorization: `Bearer ${accessToken.value}`,
+     },
+   })
+   const data = await res.json()
 
-  const data: any = {
+  /*const data: any = {
     id: '682b0526c3ccd3a52710734f',
     username: 'emmanuel',
     email: 'emmanuel@icloud.com',
@@ -81,7 +81,7 @@ export const getCurrentUserInfo = async () => {
         updated_at: null,
       },
     ],
-  }
+  }*/
 
   return data
 }
