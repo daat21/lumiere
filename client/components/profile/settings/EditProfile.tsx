@@ -99,7 +99,7 @@ export function EditProfile({ user }: { user: User }) {
               )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="avatar">Avatar</Label>
+              <Label htmlFor="avatar_url">Avatar</Label>
               <Input
                 id="avatar_url"
                 name="avatar_url"
