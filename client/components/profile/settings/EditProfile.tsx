@@ -101,8 +101,8 @@ export function EditProfile({ user }: { user: User }) {
             <div className="grid gap-2">
               <Label htmlFor="avatar">Avatar</Label>
               <Input
-                id="avatar"
-                name="avatar"
+                id="avatar_url"
+                name="avatar_url"
                 type="text"
                 placeholder={user.avatar_url}
                 defaultValue={user.avatar_url}
