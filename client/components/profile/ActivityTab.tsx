@@ -4,8 +4,9 @@ import { MovieHorizontalCard } from '../home/MovieCard'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { getCurrentUser } from '@/lib/server/user/getCurrentUser'
 import { Bookmark, Star } from 'lucide-react'
+import { getCurrentUserActivity } from '@/lib/server/user/getCurrentUserActivity'
 
-const activities = [
+const activitiesDemo = [
   {
     id: 1,
     type: 'review',
@@ -74,10 +75,11 @@ interface ActivityWithMovieData {
 
 export default async function ActivityTab() {
   const user = await getCurrentUser()
+  const activities = await getCurrentUserActivity()
 
   // Fetch movie details for each activity
   const activitiesWithMovieData: ActivityWithMovieData[] = await Promise.all(
-    activities.map(async activity => {
+    activities.map(async (activity: ActivityWithMovieData) => {
       const movie_data = await getMovieDetailsByIds(activity.movie_id)
       return {
         ...activity,
@@ -89,7 +91,7 @@ export default async function ActivityTab() {
   return (
     <div className="mt-10 flex flex-col gap-10">
       {activitiesWithMovieData.map(activity => (
-        <Card key={activity.movie_id} className="p-6 shadow-lg">
+        <Card key={activity.id} className="p-6 shadow-lg">
           {activity.type === 'review' && (
             <div className="flex flex-col gap-5">
               <div className="flex items-center gap-2">
@@ -121,7 +123,7 @@ export default async function ActivityTab() {
                 </p>
               </div>
               <div>
-                <p className="mb-2 text-sm">{activity.comment}</p>
+                {/* <p className="mb-2 text-sm">{activity.comment}</p> */}
                 <MovieHorizontalCard
                   title={activity.movie_data.title}
                   image={activity.movie_data.poster_path}

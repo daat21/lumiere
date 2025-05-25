@@ -128,17 +128,6 @@ export default function MovieDescComp({ id }: { id: string }) {
                 <input type="hidden" name="movieId" value={id} />
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="comment" className="text-right">
-                      Review
-                    </Label>
-                    <Textarea
-                      id="comment"
-                      name="comment"
-                      placeholder="Enter your review here..."
-                      className="col-span-10"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="rating" className="text-right">
                       Ratings
                     </Label>
@@ -148,14 +137,26 @@ export default function MovieDescComp({ id }: { id: string }) {
                         name="rating"
                         defaultValue={value}
                         onValueChange={setValue}
+                        min={0}
                         max={10}
-                        step={0.1}
+                        step={1}
                         className={cn('w-[60%]')}
                       />
                       <div className="rounded border px-3 py-1 text-sm font-medium">
                         {value[0]}
                       </div>
                     </div>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="comment" className="text-right">
+                      Review
+                    </Label>
+                    <Textarea
+                      id="comment"
+                      name="comment"
+                      placeholder="Enter your review here..."
+                      className="col-span-10"
+                    />
                   </div>
                 </div>
                 <DialogFooter>

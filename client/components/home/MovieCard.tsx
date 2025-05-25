@@ -234,7 +234,7 @@ export function MovieReviewCard({
                     className="h-4 w-4 fill-yellow-400 text-yellow-400"
                   />
                 ))}
-                {Array.from({ length: 5 - rating }).map((_, index) => (
+                {Array.from({ length: 10 - rating }).map((_, index) => (
                   <Star
                     key={index}
                     className="h-4 w-4 fill-gray-200 text-gray-200"
