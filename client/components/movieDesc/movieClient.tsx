@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
 import ReviewScrollArea from '@/components/movieDesc/reviewScrollArea'
 import { Slider } from '@/components/ui/slider'
+import Rating from '@mui/material/Rating'
 
 //import ReviewSlider from '@/components/movieDesc/reviewSlider'
 import { useEffect, useState, useActionState } from 'react'
@@ -133,7 +134,7 @@ export default function MovieDescComp({ id }: { id: string }) {
                     </Label>
                     {/*<ReviewSlider />*/}
                     <div className="flex w-full justify-center gap-4">
-                      <Slider
+                      {/* <Slider
                         name="rating"
                         defaultValue={value}
                         onValueChange={setValue}
@@ -141,6 +142,16 @@ export default function MovieDescComp({ id }: { id: string }) {
                         max={10}
                         step={1}
                         className={cn('w-[60%]')}
+                      /> */}
+                      <Rating
+                        name="rating"
+                        value={value[0]}
+                        defaultValue={5}
+                        max={10}
+                        precision={1}
+                        onChange={(_, newValue) => {
+                          setValue([newValue || 0])
+                        }}
                       />
                       <div className="rounded border px-3 py-1 text-sm font-medium">
                         {value[0]}
