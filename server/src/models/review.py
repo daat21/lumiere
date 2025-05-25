@@ -15,7 +15,7 @@ class Review(BaseModel):
                 "movie_title": "The Dark Knight",
                 "user_id": "507f1f77bcf86cd799439012",
                 "username": "john_doe",
-                "rating": 8.5,
+                "rating": 8,
                 "comment": "Great movie with amazing performances!",
                 "created_at": "2024-01-01T00:00:00",
                 "updated_at": None
@@ -28,7 +28,7 @@ class Review(BaseModel):
     movie_title: str = Field(..., min_length=1, description="Title of the movie")
     user_id: str = Field(..., min_length=1, description="ID of the user who wrote the review")
     username: str = Field(..., min_length=1, max_length=50, description="Username of the reviewer")
-    rating: float = Field(..., ge=0, le=10, description="Rating from 0 to 10")
+    rating: int = Field(..., ge=0, le=10, description="Rating from 0 to 10 (integer)")
     comment: str = Field(..., min_length=1, max_length=1000, description="Review comment")
     created_at: datetime = Field(default_factory=datetime.now, description="When the review was created")
     updated_at: Optional[datetime] = Field(None, description="When the review was last updated")
@@ -38,7 +38,7 @@ class Review(BaseModel):
         """Validate rating is between 0 and 10"""
         if not 0 <= v <= 10:
             raise ValueError('Rating must be between 0 and 10')
-        return round(v, 1)  # Round to 1 decimal place
+        return int(v)
 
     @field_validator('comment')
     def validate_comment(cls, v):
@@ -55,13 +55,13 @@ class ReviewCreate(BaseModel):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "rating": 8.5,
+                "rating": 8,
                 "comment": "Great movie with amazing performances!"
             }
         }
     )
     
-    rating: float = Field(..., ge=0, le=10, description="Rating from 0 to 10")
+    rating: int = Field(..., ge=0, le=10, description="Rating from 0 to 10 (integer)")
     comment: str = Field(..., min_length=1, max_length=1000, description="Review comment")
 
     @field_validator('rating')
@@ -69,7 +69,7 @@ class ReviewCreate(BaseModel):
         """Validate rating is between 0 and 10"""
         if not 0 <= v <= 10:
             raise ValueError('Rating must be between 0 and 10')
-        return round(v, 1)  # Round to 1 decimal place
+        return int(v)
 
     @field_validator('comment')
     def validate_comment(cls, v):
@@ -86,13 +86,13 @@ class ReviewUpdate(BaseModel):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "rating": 9.0,
+                "rating": 9,
                 "comment": "Updated review: Even better after watching it again!"
             }
         }
     )
     
-    rating: Optional[float] = Field(None, ge=0, le=10, description="Updated rating from 0 to 10")
+    rating: Optional[int] = Field(None, ge=0, le=10, description="Updated rating from 0 to 10 (integer)")
     comment: Optional[str] = Field(None, min_length=1, max_length=1000, description="Updated review comment")
 
     @field_validator('rating')
@@ -100,7 +100,7 @@ class ReviewUpdate(BaseModel):
         """Validate rating is between 0 and 10"""
         if v is not None and not 0 <= v <= 10:
             raise ValueError('Rating must be between 0 and 10')
-        return round(v, 1) if v is not None else v  # Round to 1 decimal place if not None
+        return int(v) if v is not None else v
 
     @field_validator('comment')
     def validate_comment(cls, v):
