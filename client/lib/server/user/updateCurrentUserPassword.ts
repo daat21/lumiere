@@ -72,7 +72,7 @@ export const updateCurrentUserPassword = async (
   }
 
   const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/users/me', {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${accessToken.value}`,
       'Content-Type': 'application/json',

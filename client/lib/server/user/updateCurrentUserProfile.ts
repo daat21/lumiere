@@ -43,7 +43,7 @@ export const updateCurrentUserProfile = async (
   const validatedFields = updateCurrentUserProfileSchema.safeParse({
     username: formData.get('username'),
     bio: formData.get('bio'),
-    avatar_url: formData.get('avatar'),
+    avatar_url: formData.get('avatar_url'),
   })
 
   if (!validatedFields.success) {
@@ -61,7 +61,7 @@ export const updateCurrentUserProfile = async (
   }
 
   const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/users/me', {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${accessToken.value}`,
       'Content-Type': 'application/json',

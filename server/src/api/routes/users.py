@@ -112,7 +112,7 @@ async def get_current_user_info(
     return user_dict
 
 # Update current user information
-@router.put("/me", response_model=User)
+@router.patch("/me", response_model=User)
 async def update_current_user(
     user_data: UserUpdate,
     current_user: User = Depends(get_current_user)

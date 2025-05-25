@@ -187,9 +187,12 @@ class UserService:
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"User with id {user_id} not found"
                 )
+            if isinstance(user, dict):
+                user["id"] = str(user["_id"])
+                user = User(**user)
 
             # Check if user is authorized to update
-            if str(user["_id"]) != current_user.id and not current_user.is_superuser:
+            if str(user.id) != current_user.id and not current_user.is_superuser:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail="Not authorized to update this user"
@@ -198,19 +201,18 @@ class UserService:
             # Prepare update data
             update_data = {}
 
-            if user_data.email is not None:
-                # Check if new email is already taken
-                existing_user = await self.get_user_by_email(user_data.email)
-                if existing_user and str(existing_user["_id"]) != user_id:
-                    raise ValidationError("Email already registered")
-                update_data["email"] = user_data.email
-
             if user_data.username is not None:
                 # Check if new username is already taken
                 existing_user = await self.get_user_by_username(user_data.username)
-                if existing_user and str(existing_user["_id"]) != user_id:
+                if existing_user and str(existing_user.id) != user_id:
                     raise ValidationError("Username already taken")
                 update_data["username"] = user_data.username
+
+            if user_data.avatar_url is not None:
+                update_data["avatar_url"] = user_data.avatar_url
+
+            if user_data.bio is not None:
+                update_data["bio"] = user_data.bio
 
             if user_data.new_password is not None:
                 # Verify current password
@@ -220,7 +222,7 @@ class UserService:
 
                 if not bcrypt.checkpw(
                     user_data.current_password.encode('utf-8'),
-                    user["hashed_password"].encode('utf-8')
+                    user.hashed_password.encode('utf-8')
                 ):
                     raise ValidationError("Current password is incorrect")
 
@@ -236,12 +238,10 @@ class UserService:
 
             return await self.get_user_by_id(user_id)
 
-        except ValidationError:
-            raise
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Error updating user: {str(e)}"
+                detail=str(e)
             )
 
     async def delete_user(self, user_id: str, current_user: User) -> bool:
