@@ -84,14 +84,11 @@ export default function MovieDescComp({ id }: { id: string }) {
       setTimeout(() => window.location.reload(), 1500)
     } else if (reviewState?.code == 401) {
       toast.error(reviewState.message || 'User is not logged in!')
-      setTimeout(
-        () => (window.location.href = `http://localhost:3000/login`),
-        1500
-      )
+      setTimeout(() => (window.location.href = `/login`),1500)
     } else if (reviewState?.code == 400) {
-      toast.error(reviewState.message || 'Failure while posting review...')
-    }
-  }, [reviewState])
+      toast.error(reviewState.message || 'Failure while posting review... or Review already posted, Kindly update the review via Profile page...')
+    } 
+    }, [reviewState])
 
   if (loading) return <p>Please wait! Loading movie details {':)'}</p>
   if (!movie) return <p>No data found, sorry! {':(}'}</p>

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useState } from 'react'
 import Link from 'next/link'
+import { WatchlistBookmark } from './WatchlistBookmark'
 
 export function MovieCard({
   title,
@@ -41,9 +42,7 @@ export function MovieCard({
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
             </div>
-            <button className="group rounded-full p-1">
-              <Bookmark className="h-5 w-5 text-green-500 group-hover:fill-green-500 group-hover:text-green-500" />
-            </button>
+            <WatchlistBookmark movie_id={id}/>
           </div>
           <div className="mx-2 mt-4 text-center">
             <Link href={`/movie/${id}`}>
