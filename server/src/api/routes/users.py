@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -195,7 +195,66 @@ async def update_bio(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error updating bio: {str(e)}"
         )
-    
+
+@router.get("/me/activity", response_model=Dict[str, Any])
+async def get_user_activity(
+    current_user: User = Depends(get_current_user),
+    skip: int = 0,
+    limit: int = 10
+):
+    """
+    Get user activity, including reviews and watchlists
+    """
+    # Get user's reviews
+    review_service = ReviewService()
+    user_reviews = await review_service.get_user_reviews(
+        user_id=current_user.id,
+        skip=skip,
+        limit=limit
+    )
+# Get user's watchlists
+    watchlist_service = WatchlistService()
+    user_watchlists = await watchlist_service.get_user_watchlists(
+        user_id=current_user.id,
+        skip=skip,
+        limit=limit
+    )
+
+    # Create activity list
+    activities = []
+
+    # Add reviews to activity
+    for review in user_reviews:
+        if review.get("movie_id"):
+            activities.append({
+                "id": str(review["_id"]),
+                "type": "review",
+                "rating": review["rating"],
+                "comment": review["comment"],
+                "movie_id": review["movie_id"],
+                "created_at": review["created_at"]
+            })
+    # Add watchlists to activity
+    for watchlist in user_watchlists:
+        for movie in watchlist.get("movies", []):
+            if movie.get("movie_id"):
+                activities.append({
+                    "id": f"{watchlist['_id']}_{movie['movie_id']}",
+                    "type": "watchlist",
+                    "movie_id": movie["movie_id"],
+                    "created_at": movie.get("added_at", watchlist["created_at"])
+                })
+
+    # Sort activity by created_at in descending order
+    activities.sort(key=lambda x: x["created_at"], reverse=True)
+
+    return {
+        "activities": activities,
+        "total_reviews": len(user_reviews),
+        "total_favorites": sum(len(w.get("movies", [])) for w in user_watchlists)
+    }
+
+
 # Backend management and administrator operations
 
 # Get user information by ID
