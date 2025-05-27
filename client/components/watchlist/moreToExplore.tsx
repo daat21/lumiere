@@ -110,7 +110,7 @@ export function MoreToExplore({
           ))}
           {movies.length === 0 && (
             <div className="col-span-3 mt-8 text-center">
-              No movies found for this genre.
+              No movies found...
             </div>
           )}
         </div>
