@@ -21,5 +21,5 @@ export const deleteMovieFromWatchlist = async (movie_id:string) => {
         Authorization: `Bearer ${accessToken.value}`,
       },
     })
-return {done:false}
+return {done:deleteFromWatchlistResponse.ok}
 }

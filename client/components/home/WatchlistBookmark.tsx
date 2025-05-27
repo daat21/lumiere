@@ -48,8 +48,8 @@ export function WatchlistBookmark({movie_id}:{movie_id: string}){
     }
 
     return (
-        <button className="group rounded-full p-1">
-              <Bookmark className={`"h-5 w-5 transition ${bookmarked?'fill-green-500 text-green-500':'text-green-500'} group-hover:fill-green-500 group-hover:text-green-500"`} />
+        <button className="group rounded-full p-1" onClick={bookmarkToggle}>
+              <Bookmark className={`h-5 w-5 transition ${bookmarked?'fill-green-500 text-green-500':'text-green-500'} group-hover:fill-green-500 group-hover:text-green-500`} />
         </button>
     )
 }
