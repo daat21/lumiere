@@ -63,14 +63,16 @@ export const postReview = async ( previousState: ReviewFormState, formData: Form
 
     if (res.ok){
         return{
-            success: false,
-            message: data.message || 'Review is posted!'
+            success: true,
+            message: data.message || 'Review is posted!',
+            code:200
         }
     }
     else{
         return{
             success: false,
-            message: data.detail || 'Failure while posting review...'
+            message: data.detail || 'Failure while posting review...',
+            code:400
         }
     }
 }
