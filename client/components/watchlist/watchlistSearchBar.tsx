@@ -29,11 +29,11 @@ export function SearchBar({
       movie.title.toLowerCase().includes(searchSubString.toLowerCase())
     )
     onSearch(searched)
-    console.log(searched)
+    // console.log(searched)
   }, 500)
   const handleSearch = (searchEvent: React.ChangeEvent<HTMLInputElement>) => {
     const value = searchEvent.target.value
-    console.log(value)
+    // console.log(value)
     setSearchQuery(value)
     debouncedSearch(value)
   }

@@ -44,8 +44,8 @@ export default async function Watchlist() {
   if (userWatchlist.length == 0)
     return <h1>No movies in watchlist, {';_;'}!</h1>
 
-  console.log(userWatchlist)
-  console.log(genresList)
+  // console.log(userWatchlist)
+  // console.log(genresList)
   return (
     /*<div className="flex flex-col gap-12">
       <div>

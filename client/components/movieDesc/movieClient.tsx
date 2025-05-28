@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
 import ReviewScrollArea from '@/components/movieDesc/reviewScrollArea'
-import { Slider } from '@/components/ui/slider'
+// import { Slider } from '@/components/ui/slider'
 import Rating from '@mui/material/Rating'
 
 //import ReviewSlider from '@/components/movieDesc/reviewSlider'
@@ -25,7 +25,7 @@ import {
   getCreditsByMovieId,
   getVideosByMovieId,
 } from '@/lib/tmdb'
-import { cn } from '@/lib/utils'
+// import { cn } from '@/lib/utils'
 import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 import { postReview } from '@/lib/server/user/postReview'
@@ -85,16 +85,19 @@ export default function MovieDescComp({ id }: { id: string }) {
       setTimeout(() => window.location.reload(), 1500)
     } else if (reviewState?.code == 401) {
       toast.error(reviewState.message || 'User is not logged in!')
-      setTimeout(() => (window.location.href = `/login`),1500)
+      setTimeout(() => (window.location.href = `/login`), 1500)
     } else if (reviewState?.code == 400) {
-      toast.error(reviewState.message || 'Failure while posting review... or Review already posted, Kindly update the review via Profile page...')
-    } 
-    }, [reviewState])
+      toast.error(
+        reviewState.message ||
+          'Failure while posting review... or Review already posted, Kindly update the review via Profile page...'
+      )
+    }
+  }, [reviewState])
 
   if (loading) return <p>Please wait! Loading movie details {':)'}</p>
   if (!movie) return <p>No data found, sorry! {':(}'}</p>
 
-  console.log(movie)
+  // console.log(movie)
 
   return (
     <div>

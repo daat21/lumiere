@@ -6,6 +6,7 @@ import { getCurrentUser } from '@/lib/server/user/getCurrentUser'
 import { Bookmark, Star } from 'lucide-react'
 import { getCurrentUserActivity } from '@/lib/server/user/getCurrentUserActivity'
 
+/*
 const activitiesDemo = [
   {
     id: 1,
@@ -50,6 +51,7 @@ const activitiesDemo = [
     created_at: '2025-06-01',
   },
 ]
+*/
 
 interface MovieData {
   id: number

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
-import { Star, Bookmark } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useState } from 'react'
@@ -42,7 +42,7 @@ export function MovieCard({
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
             </div>
-            <WatchlistBookmark movie_id={id}/>
+            <WatchlistBookmark movie_id={id} />
           </div>
           <div className="mx-2 mt-4 text-center">
             <Link href={`/movie/${id}`}>

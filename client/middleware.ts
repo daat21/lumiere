@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
-import { updateSession } from '@/lib/server/user/updateSession'
 
 const protectedRoutes = ['/profile', '/settings', '/watchlist']
 
@@ -13,9 +12,55 @@ export default async function middleware(request: NextRequest) {
   const refreshToken = cookieStore.get('refresh_token')?.value
 
   if (!accessToken && refreshToken) {
-    const result = await updateSession()
-    if (result) {
-      accessToken = result.access_token
+    try {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_SERVER_URL + '/auth/refresh',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh_token: refreshToken }),
+        }
+      )
+
+      if (res.ok) {
+        const data = await res.json()
+        const { access_token: newAccessToken, refresh_token: newRefreshToken } =
+          data
+
+        const response = NextResponse.next()
+
+        response.cookies.set('access_token', newAccessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 60 * 30, // 30 minutes
+          sameSite: 'lax',
+          path: '/',
+        })
+
+        response.cookies.set('refresh_token', newRefreshToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          sameSite: 'lax',
+          path: '/',
+        })
+
+        return response
+      } else {
+        if (isProtectedRoute) {
+          const response = NextResponse.redirect(new URL('/login', request.url))
+          response.cookies.delete('access_token')
+          response.cookies.delete('refresh_token')
+          return response
+        }
+      }
+    } catch (error) {
+      console.error('Token refresh failed:', error)
+      if (isProtectedRoute) {
+        return NextResponse.redirect(new URL('/login', request.url))
+      }
     }
   }
 

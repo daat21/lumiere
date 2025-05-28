@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Bars3Icon } from '@heroicons/react/24/outline'
-import { House, Binoculars, Bookmark, User, Settings } from 'lucide-react'
+import { House, Binoculars, Bookmark, User } from 'lucide-react'
 
 export function DropdownMenuComponent() {
   return (

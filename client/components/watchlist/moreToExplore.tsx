@@ -52,11 +52,11 @@ export function MoreToExplore({
     try {
       const fetchedMovies = initialMovies.filter((movie: Movie) => {
         if (movie.genres.find(genre => genre.id == String(genreId))) {
-          console.log(movie)
+          // console.log(movie)
           return movie
         }
       })
-      console.log(fetchedMovies)
+      // console.log(fetchedMovies)
       setMovies(fetchedMovies ?? [])
     } catch (err) {
       console.error('Failed to fetch movies by genre:', err)
