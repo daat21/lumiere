@@ -34,9 +34,9 @@ export function MostPopular({ movies }: { movies: Movie[] }) {
       }}
       className="mt-6 w-full"
     >
-      <CarouselContent>
+      <CarouselContent className="-ml-2 md:-ml-4">
         {topRatedMovies.map((movie: Movie) => (
-          <CarouselItem key={movie.id} className="basis-1/5 pl-4">
+          <CarouselItem key={movie.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pl-2 md:pl-4">
             <div className="justify-items-center">
               <MovieCard
                 title={movie.title}
@@ -48,8 +48,8 @@ export function MostPopular({ movies }: { movies: Movie[] }) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="hidden sm:flex" />
+      <CarouselNext className="hidden sm:flex" />
     </Carousel>
   )
 }

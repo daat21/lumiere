@@ -21,7 +21,7 @@ export function MovieCard({
   id: string
 }) {
   return (
-    <Card className="h-[420px] w-[200px] overflow-hidden rounded-lg py-0 shadow-lg">
+    <Card className="h-[360px] w-[160px] sm:h-[420px] sm:w-[200px] overflow-hidden rounded-lg py-0 shadow-lg">
       <CardContent className="p-0">
         <Link href={`/movie/${id}`}>
           {image ? (
@@ -30,23 +30,23 @@ export function MovieCard({
               alt={title}
               width={200}
               height={300}
-              className="object-cover"
+              className="h-[240px] w-[160px] sm:h-[300px] sm:w-[200px] object-cover"
             />
           ) : (
-            <div className="h-[300px] w-[200px] bg-gray-200" />
+            <div className="h-[240px] w-[160px] sm:h-[300px] sm:w-[200px] bg-gray-200" />
           )}
         </Link>
-        <div className="p-2">
+        <div className="p-1.5 sm:p-2">
           <div className="mt-1 flex items-center justify-between">
             <div className="ml-1/2 flex items-center gap-1 p-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
+              <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-xs sm:text-sm font-semibold">{rating.toFixed(1)}</span>
             </div>
             <WatchlistBookmark movie_id={id} />
           </div>
-          <div className="mx-2 mt-4 text-center">
+          <div className="mx-1 sm:mx-2 mt-2 sm:mt-4 text-center">
             <Link href={`/movie/${id}`}>
-              <p className="text-base font-bold">{title}</p>
+              <p className="text-sm sm:text-base font-bold line-clamp-2">{title}</p>
             </Link>
           </div>
         </div>
@@ -65,7 +65,7 @@ export function MovieBackdropCard({
   id: string
 }) {
   return (
-    <Card className="h-[240px] w-[340px] overflow-hidden rounded-lg py-0 shadow-lg">
+    <Card className="h-[180px] w-[280px] sm:h-[240px] sm:w-[340px] overflow-hidden rounded-lg py-0 shadow-lg">
       <Link href={`/movie/${id}`}>
         <CardContent className="p-0">
           {image ? (
@@ -74,14 +74,14 @@ export function MovieBackdropCard({
               alt={title}
               width={340}
               height={200}
-              className="object-cover"
+              className="h-[140px] w-[280px] sm:h-[200px] sm:w-[340px] object-cover"
             />
           ) : (
-            <div className="h-[200px] w-[340px] bg-gray-200" />
+            <div className="h-[140px] w-[280px] sm:h-[200px] sm:w-[340px] bg-gray-200" />
           )}
-          <div className="p-2">
+          <div className="p-1.5 sm:p-2">
             <div className="mt-0">
-              <p className="text-base font-bold">{title}</p>
+              <p className="text-sm sm:text-base font-bold line-clamp-2">{title}</p>
             </div>
           </div>
         </CardContent>
@@ -113,34 +113,34 @@ export function MovieHorizontalCard({
     // <Card className="h-[141px] overflow-hidden rounded-lg py-0">
     <Card
       className={cn(
-        'h-[141px] overflow-hidden rounded-lg py-0',
+        'h-auto sm:h-[141px] overflow-hidden rounded-lg py-0',
         isShadow && 'shadow-lg'
       )}
     >
       <Link href={`/movie/${id}`}>
-        <CardContent className={cn('flex items-center gap-4 p-0', className)}>
+        <CardContent className={cn('flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 p-2 sm:p-0', className)}>
           {image ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${image}`}
               alt={title}
               width={94}
               height={141}
-              className="h-[141px] w-[94px] object-cover"
+              className="h-[120px] w-full sm:h-[141px] sm:w-[94px] object-cover rounded sm:rounded-none"
             />
           ) : (
-            <div className="h-[141px] min-w-[94px] bg-gray-200" />
+            <div className="h-[120px] w-full sm:h-[141px] sm:min-w-[94px] bg-gray-200 rounded sm:rounded-none" />
           )}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1 sm:gap-2 w-full">
             <h3>
-              <span className="text-lg font-bold">{title}</span>
-              <span className="text-muted-foreground ml-2 text-sm">
+              <span className="text-base sm:text-lg font-bold">{title}</span>
+              <span className="text-muted-foreground ml-2 text-xs sm:text-sm">
                 {original_title !== title ? `(${original_title})` : ''}
               </span>
             </h3>
-            <p className="text-muted-foreground text-sm">{release_date}</p>
-            <p className="text-sm">
-              {overview.length > 200
-                ? overview.slice(0, 200) + '...'
+            <p className="text-muted-foreground text-xs sm:text-sm">{release_date}</p>
+            <p className="text-xs sm:text-sm line-clamp-3 sm:line-clamp-none">
+              {overview.length > 150
+                ? overview.slice(0, 150) + '...'
                 : overview}
               {/* {overview} */}
             </p>
