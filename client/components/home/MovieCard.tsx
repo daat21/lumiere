@@ -22,8 +22,8 @@ export function MovieCard({
 }) {
   return (
     <Card className="h-[360px] w-[160px] sm:h-[420px] sm:w-[200px] overflow-hidden rounded-lg py-0 shadow-lg">
-      <CardContent className="p-0">
-        <Link href={`/movie/${id}`}>
+      <CardContent className="flex h-full flex-col p-0">
+        <Link href={`/movie/${id}`} className="flex-shrink-0">
           {image ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${image}`}
@@ -36,7 +36,7 @@ export function MovieCard({
             <div className="h-[240px] w-[160px] sm:h-[300px] sm:w-[200px] bg-gray-200" />
           )}
         </Link>
-        <div className="p-1.5 sm:p-2">
+        <div className="flex flex-1 flex-col justify-between p-1.5 sm:p-2">
           <div className="mt-1 flex items-center justify-between">
             <div className="ml-1/2 flex items-center gap-1 p-1">
               <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
