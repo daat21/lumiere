@@ -55,6 +55,52 @@ export function MovieCard({
   )
 }
 
+export function MovieDescCard({
+  title,
+  rating,
+  image,
+  id,
+}: {
+  title: string
+  rating: number
+  image: string | null
+  id: string
+}) {
+  return (
+    <Card className="h-[570px] w-[300px] overflow-hidden rounded-lg py-0 shadow-lg">
+      <CardContent className="p-0">
+        <Link href={`/movie/${id}`}>
+          {image ? (
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${image}`}
+              alt={title}
+              width={300}
+              height={400}
+              className="object-cover"
+            />
+          ) : (
+            <div className="h-[300px] w-[200px] bg-gray-200" />
+          )}
+        </Link>
+        <div className="p-2">
+          <div className="mt-1 flex items-center justify-between">
+            <div className="ml-1/2 flex items-center gap-1 p-1">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-semibold">{rating.toFixed(1)}</span>
+            </div>
+            <WatchlistBookmark movie_id={id} />
+          </div>
+          <div className="mx-2 mt-4 text-center">
+            <Link href={`/movie/${id}`}>
+              <p className="text-base font-bold">{title}</p>
+            </Link>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export function MovieBackdropCard({
   title,
   image,

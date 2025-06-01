@@ -1,6 +1,6 @@
 'use client'
 
-import { MovieCard } from '@/components/home/MovieCard'
+import { MovieDescCard } from '@/components/home/MovieCard'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -106,7 +106,7 @@ export default function MovieDescComp({ id }: { id: string }) {
       </h1>
       <div className="flex flex-row border-amber-100">
         <div className="mr-20 ml-10 flex flex-col border-amber-100">
-          <MovieCard
+          <MovieDescCard
             title={movie.original_title}
             rating={movie.vote_average}
             image={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
@@ -201,12 +201,12 @@ export default function MovieDescComp({ id }: { id: string }) {
             <p>{credits?.castNames}</p>
           </div>
           <div className="mt-4 flex flex-row border-amber-100">
-            <Button variant="outline" className="mt-4 mb-4" asChild>
+            {videos?.trailerUrl != 'na' && (<Button variant="outline" className="mt-4 mb-4" asChild>
               <Link href={videos?.trailerUrl ?? '#'}>Trailer</Link>
-            </Button>
-            <Button variant="outline" className="mt-4 mb-4 ml-4" asChild>
+            </Button>)}
+            {videos?.teaserUrl != 'na' && (<Button variant="outline" className="mt-4 mb-4 ml-4" asChild>
               <Link href={videos?.teaserUrl ?? '#'}>Teaser</Link>
-            </Button>
+            </Button>)}
           </div>
           <div className="mt-4 flex flex-col border-amber-100">
             <ReviewScrollArea id={id} />
