@@ -167,6 +167,8 @@ type movieReviews = {
   name: string
   comment: string
   rating: number | null
+  created_at: string
+  avatar_url: string
 }
 
 const getMovieReviewsById = async (
@@ -185,11 +187,13 @@ const getMovieReviewsById = async (
       username: string
       comment: string
       rating: number
+      created_at: string
     }) => ({
       id: review._id,
       name: review.username,
       comment: review.comment,
       rating: review.rating,
+      created_at: review.created_at,
     })
   )
   const tmdbReviews: movieReviews[] = reviewData.tmdb_reviews.map(
@@ -197,12 +201,17 @@ const getMovieReviewsById = async (
       id: string
       author: string
       content: string
-      author_details: { rating: number }
+      author_details: { rating: number; avatar_path: string }
+      created_at: string
     }) => ({
       id: review.id,
       name: review.author,
       comment: review.content,
       rating: review.author_details?.rating ?? null,
+      created_at: review.created_at,
+      avatar_url:
+        'https://image.tmdb.org/t/p/w500' +
+          review.author_details?.avatar_path || '',
     })
   )
   return [...userReviews, ...tmdbReviews]
