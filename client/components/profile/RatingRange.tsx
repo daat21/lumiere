@@ -3,18 +3,18 @@ import React, { useState } from 'react'
 import { DualRangeSlider } from '../ui/DualRangeSlider'
 
 const DualRangeSliderDemo = () => {
-  const [values, setValues] = useState([0, 5])
+  const [values, setValues] = useState([0, 10])
 
   return (
-    <div className="flex items-center gap-2">
-      <p className="text-sm font-bold">Rating</p>
-      <div className="w-[150px]">
+    <div className="flex items-center gap-1">
+      <p className="text-xs sm:text-sm font-bold">Rating</p>
+      <div className="w-[80px] sm:w-[150px]">
         <DualRangeSlider
-          label={value => value}
+          label={value => <span className="text-[10px] sm:text-sm">{value}</span>}
           value={values}
           onValueChange={setValues}
           min={0}
-          max={5}
+          max={10}
           step={1}
         />
       </div>

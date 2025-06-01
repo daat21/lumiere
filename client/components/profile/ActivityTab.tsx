@@ -91,23 +91,23 @@ export default async function ActivityTab() {
   )
 
   return (
-    <div className="mt-10 flex flex-col gap-10">
+    <div className="mt-6 flex flex-col gap-6 sm:mt-10 sm:gap-10">
       {activitiesWithMovieData.map(activity => (
-        <Card key={activity.id} className="p-6 shadow-lg">
+        <Card key={activity.id} className="p-3 sm:p-6 shadow-lg">
           {activity.type === 'review' && (
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center gap-2">
-                <>
+            <div className="flex flex-col gap-3 sm:gap-5">
+              <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
+                <div className="flex items-center gap-2">
                   <Avatar className="border-ring size-6 border">
                     <AvatarImage src={user?.avatar_url} alt={user?.username} />
                     <AvatarFallback>
                       {user?.username?.slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-xs sm:text-sm">
                     {user?.username}
                   </p>
-                  <p className="flex items-center gap-1 text-sm">
+                  <p className="flex items-center gap-1 text-xs sm:text-sm">
                     Reviewed{' '}
                     <span className="text-primary font-bold">
                       {activity.movie_data.title}
@@ -115,8 +115,8 @@ export default async function ActivityTab() {
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     {activity.rating}
                   </p>
-                </>
-                <p className="text-muted-foreground ml-auto text-sm">
+                </div>
+                <p className="text-muted-foreground text-xs sm:text-sm sm:ml-auto mt-1 sm:mt-0">
                   {new Date(activity.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -125,7 +125,6 @@ export default async function ActivityTab() {
                 </p>
               </div>
               <div>
-                {/* <p className="mb-2 text-sm">{activity.comment}</p> */}
                 <MovieHorizontalCard
                   title={activity.movie_data.title}
                   image={activity.movie_data.poster_path}
@@ -139,19 +138,19 @@ export default async function ActivityTab() {
             </div>
           )}
           {activity.type === 'watchlist' && (
-            <>
-              <div className="flex items-center gap-2">
-                <>
+            <div className="flex flex-col gap-3 sm:gap-5">
+              <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
+                <div className="flex items-center gap-2">
                   <Avatar className="border-ring size-6 border">
                     <AvatarImage src={user?.avatar_url} alt={user?.username} />
                     <AvatarFallback>
                       {user?.username?.slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-xs sm:text-sm">
                     {user?.username}
                   </p>
-                  <p className="flex items-center gap-1 text-sm">
+                  <p className="flex items-center gap-1 text-xs sm:text-sm">
                     Added{' '}
                     <span className="text-primary font-bold">
                       {activity.movie_data.title}
@@ -159,8 +158,8 @@ export default async function ActivityTab() {
                     to watchlist{' '}
                     <Bookmark className="h-4 w-4 fill-green-500 text-green-500" />
                   </p>
-                </>
-                <p className="text-muted-foreground ml-auto text-sm">
+                </div>
+                <p className="text-muted-foreground text-xs sm:text-sm sm:ml-auto mt-1 sm:mt-0">
                   {new Date(activity.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -179,7 +178,7 @@ export default async function ActivityTab() {
                   id={activity.movie_id}
                 />
               </div>
-            </>
+            </div>
           )}
         </Card>
       ))}

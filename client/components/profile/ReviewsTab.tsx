@@ -43,13 +43,13 @@ export default async function ReviewsTab({ searchParams }: ReviewsTabProps) {
   if (!reviews || !Array.isArray(reviews)) {
     return (
       <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2 items-start sm:flex-row sm:items-center sm:justify-between">
           <ReviewsFilter />
-          <p className="text-sm">
+          <p className="text-xs sm:text-sm">
             Total <span className="font-bold">0</span> reviews
           </p>
         </div>
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-6 sm:gap-10">
           <p className="text-muted-foreground text-center">No reviews found.</p>
         </div>
       </div>
@@ -68,14 +68,13 @@ export default async function ReviewsTab({ searchParams }: ReviewsTabProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2 items-start sm:flex-row sm:items-center sm:justify-between">
         <ReviewsFilter />
-        <p className="text-sm">
-          Total <span className="font-bold">{reviewsWithMovieData.length}</span>{' '}
-          reviews
+        <p className="text-xs sm:text-sm">
+          Total <span className="font-bold">{reviewsWithMovieData.length}</span> reviews
         </p>
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-6 sm:gap-10">
         {reviewsWithMovieData.map(review => (
           <div key={review._id}>
             <MovieReviewCard
