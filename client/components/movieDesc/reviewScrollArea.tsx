@@ -36,7 +36,7 @@ export default function ReviewScrollArea({ id }: { id: string }) {
     })
   }, [id])
   if (loading) return <p>Please wait! Loading reviews {':)'}</p>
-  if (!reviews) return <p>No reviews found, sorry! {':(}'}</p>
+  if (reviews.length==0) return <div className='font-semibold text-green-600 text-2xl'>This movie hasn't been reviewed yet... Be the first one to review it!</div>
 
   console.log(reviews)
 

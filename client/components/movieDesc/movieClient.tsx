@@ -207,6 +207,7 @@ export default function MovieDescComp({ id }: { id: string }) {
             {videos?.teaserUrl != 'na' && (<Button variant="outline" className="mt-4 mb-4 ml-4" asChild>
               <Link href={videos?.teaserUrl ?? '#'}>Teaser</Link>
             </Button>)}
+            {videos?.trailerUrl == 'na' && videos?.trailerUrl == 'na' && (<div className='font-semibold text-red-600 text-xl'>Apologies, trailer and teaser videos are not available for {movie.original_title} ({movie.release_date.slice(0, 4)}).</div>)}
           </div>
           <div className="mt-4 flex flex-col border-amber-100">
             <ReviewScrollArea id={id} />
