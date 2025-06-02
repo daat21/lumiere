@@ -128,12 +128,12 @@ export default function MovieDescComp({ id }: { id: string }) {
               <form action={formAction}>
                 <input type="hidden" name="movieId" value={id} />
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="rating" className="text-right">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="rating" className="text-left sm:text-right">
                       Ratings
                     </Label>
                     {/*<ReviewSlider />*/}
-                    <div className="flex w-full justify-center gap-4">
+                    <div className="flex w-full justify-center gap-4 sm:col-span-3">
                       {/* <Slider
                         name="rating"
                         defaultValue={value}
