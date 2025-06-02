@@ -111,7 +111,7 @@ export function MovieBackdropCard({
   id: string
 }) {
   return (
-    <Card className="h-[180px] w-[280px] sm:h-[240px] sm:w-[340px] overflow-hidden rounded-lg py-0 shadow-lg">
+    <Card className="h-[180px] sm:h-[240px] w-full max-w-[340px] lg:max-w-[420px] overflow-hidden rounded-lg py-0 shadow-lg">
       <Link href={`/movie/${id}`}>
         <CardContent className="p-0">
           {image ? (
@@ -120,10 +120,10 @@ export function MovieBackdropCard({
               alt={title}
               width={340}
               height={200}
-              className="h-[140px] w-[280px] sm:h-[200px] sm:w-[340px] object-cover"
+              className="h-[140px] sm:h-[200px] w-full object-cover"
             />
           ) : (
-            <div className="h-[140px] w-[280px] sm:h-[200px] sm:w-[340px] bg-gray-200" />
+            <div className="h-[140px] sm:h-[200px] w-full bg-gray-200" />
           )}
           <div className="p-1.5 sm:p-2">
             <div className="mt-0">

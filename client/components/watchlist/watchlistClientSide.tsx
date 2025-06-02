@@ -32,11 +32,11 @@ export default function WatchlistClientSide({
   }, [searchedMovies])
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-6 md:gap-12 px-4 md:px-0">
       <div>
-        <h1>Watchlist</h1>
+      <h1 className="text-2xl md:text-3xl font-bold">Watchlist</h1>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-6 md:gap-8">
         <div>
           <SearchBar movies={userWatchlist} onSearch={setSearchedMovies} />
         </div>

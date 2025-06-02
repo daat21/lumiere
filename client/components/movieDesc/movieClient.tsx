@@ -101,11 +101,11 @@ export default function MovieDescComp({ id }: { id: string }) {
 
   return (
     <div>
-      <h1 className="mb-8 text-3xl">
+      <h1 className="mb-8 text-3xl break-words">
         {movie.original_title} ({movie.release_date.slice(0, 4)})
       </h1>
-      <div className="flex flex-row border-amber-100">
-        <div className="mr-20 ml-10 flex flex-col border-amber-100">
+      <div className="flex flex-col md:flex-row border-amber-100">
+        <div className="flex flex-col md:mr-20 md:ml-10 mr-0 ml-0 border-amber-100 mb-8 md:mb-0">
           <MovieDescCard
             title={movie.original_title}
             rating={movie.vote_average}
@@ -117,7 +117,7 @@ export default function MovieDescComp({ id }: { id: string }) {
             <DialogTrigger asChild>
               <Button>Post a review</Button>
             </DialogTrigger>
-            <DialogContent className="w-1/2 sm:max-w-[none]">
+            <DialogContent className="max-w-full sm:max-w-lg md:mb-0">
               <DialogHeader>
                 <DialogTitle>Reviews</DialogTitle>
                 <DialogDescription>
@@ -128,12 +128,12 @@ export default function MovieDescComp({ id }: { id: string }) {
               <form action={formAction}>
                 <input type="hidden" name="movieId" value={id} />
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="rating" className="text-right">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="rating" className="text-left sm:text-right">
                       Ratings
                     </Label>
                     {/*<ReviewSlider />*/}
-                    <div className="flex w-full justify-center gap-4">
+                    <div className="flex w-full justify-center gap-4 sm:col-span-3">
                       {/* <Slider
                         name="rating"
                         defaultValue={value}
@@ -179,10 +179,10 @@ export default function MovieDescComp({ id }: { id: string }) {
             </DialogContent>
           </Dialog>
         </div>
-        <div className="flex flex-col items-start border-amber-100 pr-8">
+        <div className="flex flex-col items-start md:pr-8 pr-0 border-amber-100">
           <div className="flex flex-col border-amber-100">
             <div className="border-amber-100 font-semibold">Description</div>
-            <div className="border-amber-100">{movie.overview}</div>
+            <div className="border-amber-100 break-words">{movie.overview}</div>
           </div>
           <div className="mt-4 flex flex-col border-amber-100">
             <div className="border-amber-100 font-semibold">Genre</div>

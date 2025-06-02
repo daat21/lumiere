@@ -43,14 +43,14 @@ export default function MovieReview({
   const truncatedComment = useTruncateText(comment, 200)
 
   return (
-    <div className="bg-secondary flex flex-col gap-2 rounded-lg p-5">
+    <div className="bg-secondary flex flex-col gap-2 rounded-lg p-3 sm:p-5">
       <div className="flex items-center gap-2">
-        <Avatar className="border-ring size-5 border">
+        <Avatar className="border-ring size-6 sm:size-7 border">
           <AvatarImage src={avatar_url} alt={username} />
           <AvatarFallback>{username?.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        <p className="text-muted-foreground text-sm">{username}</p>
-        <p className="text-muted-foreground ml-auto text-sm">
+        <p className="text-muted-foreground text-xs sm:text-sm">{username}</p>
+        <p className="text-muted-foreground ml-auto text-xs sm:text-sm">
           {new Date(comment_date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
@@ -61,7 +61,7 @@ export default function MovieReview({
           })}
         </p>
       </div>
-      <div className="flex items-center gap-1 font-bold">
+      <div className="flex items-center gap-1 font-bold text-xs sm:text-base">
         Rating: {rating}
         <div className="flex items-center gap-0">
           {Array.from({ length: rating }).map((_, index) => (
@@ -76,8 +76,8 @@ export default function MovieReview({
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <p className="font-bold">Comment:</p>
-        <div className="">{truncatedComment}</div>
+        <p className="font-bold text-xs sm:text-base">Comment:</p>
+        <div>{truncatedComment}</div>
       </div>
     </div>
   )
