@@ -33,28 +33,28 @@ export default function ReviewScrollArea() {
           })
   }, [])
   if (loading) return <p>Please wait! Loading reviews {":)"}</p>
-  if (!reviews) return <p>No reviews found, sorry! {":(}"}</p>
+  if (!reviews) return <p>No reviews found, sorry! {":("}</p>
 
   return (
-    <ScrollArea className="h-96 w-full rounded-md border">
-      <div className="p-4">
+    <ScrollArea className="h-64 sm:h-96 w-full rounded-md border">
+      <div className="p-2 sm:p-4">
         {reviews.map((review) => (
-          <>
+          <React.Fragment key={review._id}>
             <Link href={`/movieDesc/${review.movie_id}`}>
-            <Button variant="link" key={review._id} className="text-base font-bold">
-              Movie ID: {review.movie_id}
-            </Button>
+              <Button variant="link" className="text-sm sm:text-base font-bold">
+                Movie ID: {review.movie_id}
+              </Button>
             </Link>
-            <div className="flex flex-col mt-2 ml-4">
-            <div>
-              {review.comment}
-            </div>
-            <div>
-            Rating: {review.rating}
-            </div>
+            <div className="flex flex-col mt-1 sm:mt-2 ml-2 sm:ml-4">
+              <div>
+                {review.comment}
+              </div>
+              <div>
+                Rating: {review.rating}
+              </div>
             </div>
             <Separator className="my-2" />
-          </>
+          </React.Fragment>
         ))}
       </div>
     </ScrollArea>

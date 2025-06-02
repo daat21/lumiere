@@ -15,10 +15,10 @@ export function SelectLanguage() {
   const currentValue = searchParams.get('language') || 'en'
 
   return (
-    <div className="grid gap-2">
-      <p className="font-bold">Language</p>
+    <div className="grid gap-2 w-full sm:w-[180px]">
+      <p className="font-bold text-sm sm:text-base">Language</p>
       <Select defaultValue={currentValue} name="language">
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="w-full">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -28,9 +28,11 @@ export function SelectLanguage() {
             <SelectItem value="fr">French</SelectItem>
             <SelectItem value="de">German</SelectItem>
             <SelectItem value="it">Italian</SelectItem>
-            <SelectItem value="zh">Chinese</SelectItem>
+            <SelectItem value="pt">Portuguese</SelectItem>
+            <SelectItem value="ru">Russian</SelectItem>
             <SelectItem value="ja">Japanese</SelectItem>
-            <SelectItem value="cn">Cantonese</SelectItem>
+            <SelectItem value="ko">Korean</SelectItem>
+            <SelectItem value="zh">Chinese</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

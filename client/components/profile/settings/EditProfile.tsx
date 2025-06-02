@@ -99,7 +99,7 @@ export function EditProfile({ user }: { user: User }) {
               )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="avatar_url">Avatar</Label>
+              <Label htmlFor="avatar_url" className="text-xs sm:text-sm">Upload your online Avatar</Label>
               <Input
                 id="avatar_url"
                 name="avatar_url"
@@ -107,6 +107,9 @@ export function EditProfile({ user }: { user: User }) {
                 placeholder={user.avatar_url}
                 defaultValue={user.avatar_url}
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Paste the image URL (right click an online image &rarr; Copy Image Address)
+              </p>
               {state?.errors?.avatar_url && (
                 <p className="text-sm text-red-500">
                   {state.errors.avatar_url}
