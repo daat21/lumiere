@@ -56,6 +56,18 @@ export const updateCurrentUserPassword = async (
   }
 
   if (
+    validatedFields.data.currentPassword === validatedFields.data.newPassword
+  ) {
+    return {
+      errors: {
+        newPassword: [
+          'New password cannot be the same as the current password',
+        ],
+      },
+    }
+  }
+
+  if (
     validatedFields.data.newPassword !== validatedFields.data.confirmNewPassword
   ) {
     return {

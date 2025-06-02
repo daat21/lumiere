@@ -10,7 +10,11 @@ const updateCurrentUserProfileSchema = z.object({
     .refine(val => !val || val.length >= 5, {
       message: 'Username must be at least 5 characters long',
     }),
-  bio: z.string().min(1, { message: 'Bio is required' }).optional(),
+  bio: z
+    .string()
+    .min(1, { message: 'Bio is required' })
+    .max(200, { message: 'Bio must be less than 200 characters' })
+    .optional(),
   avatar_url: z.string().min(1, { message: 'Avatar is required' }).optional(),
 })
 

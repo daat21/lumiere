@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { updateCurrentUserProfile } from '@/lib/server/user/updateCurrentUserProfile'
 import { Loader2, Pencil } from 'lucide-react'
-import { useActionState, useEffect } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
@@ -27,6 +27,9 @@ type User = {
 }
 
 export function EditProfile({ user }: { user: User }) {
+  const [bio, setBio] = useState(user.bio)
+  const [avatarUrl, setAvatarUrl] = useState(user.avatar_url)
+
   const [state, formAction, isPending] = useActionState(
     updateCurrentUserProfile,
     undefined
@@ -92,23 +95,28 @@ export function EditProfile({ user }: { user: User }) {
                 name="bio"
                 rows={4}
                 placeholder={user.bio}
-                defaultValue={user.bio}
+                value={bio}
+                onChange={e => setBio(e.target.value)}
               />
               {state?.errors?.bio && (
                 <p className="text-sm text-red-500">{state.errors.bio}</p>
               )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="avatar_url" className="text-xs sm:text-sm">Upload your online Avatar</Label>
+              <Label htmlFor="avatar_url" className="text-xs sm:text-sm">
+                Upload your online Avatar
+              </Label>
               <Input
                 id="avatar_url"
                 name="avatar_url"
                 type="text"
-                placeholder={user.avatar_url}
-                defaultValue={user.avatar_url}
+                placeholder={avatarUrl}
+                value={avatarUrl}
+                onChange={e => setAvatarUrl(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                Paste the image URL (right click an online image &rarr; Copy Image Address)
+              <p className="text-muted-foreground mt-1 text-xs">
+                Paste the image URL (right click an online image &rarr; Copy
+                Image Address)
               </p>
               {state?.errors?.avatar_url && (
                 <p className="text-sm text-red-500">

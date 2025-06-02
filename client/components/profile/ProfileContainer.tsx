@@ -7,20 +7,20 @@ export async function ProfileContainerV2() {
   const user = await getCurrentUser()
 
   return (
-    <div className="relative flex flex-col items-center text-center gap-4 sm:flex-row sm:items-center sm:text-left sm:gap-5">
-      <Avatar className="border-ring bg-background size-24 sm:size-35 border">
+    <div className="relative flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:gap-5 sm:text-left">
+      <Avatar className="border-ring bg-background size-24 border sm:size-35">
         <AvatarImage src={user?.avatar_url} alt={user?.username} />
         <AvatarFallback>{user?.username?.slice(0, 2)}</AvatarFallback>
       </Avatar>
       <div className="w-full sm:w-auto">
         <div className="flex flex-col gap-2 sm:gap-1">
-          <h1 className="text-xl sm:text-2xl font-bold">@{user?.username}</h1>
+          <h1 className="text-xl font-bold sm:text-2xl">@{user?.username}</h1>
           <p className="text-muted-foreground text-sm sm:text-base">
             {user?.bio
               ? user.bio
               : "This person is lazy and hasn't written their bio."}
           </p>
-          <p className="text-muted-foreground text-xs sm:text-sm italic">
+          <p className="text-muted-foreground text-xs italic sm:text-sm">
             Last login:{' '}
             {user?.last_login
               ? new Date(user.last_login).toLocaleDateString('en-US', {
@@ -37,7 +37,7 @@ export async function ProfileContainerV2() {
           <Pencil className="h-4 w-4" />
           Edit Profile
         </Button> */}
-        <div className="mt-4 flex flex-col gap-2 w-full sm:flex-row sm:gap-4 sm:w-auto">
+        <div className="mt-4 flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-4">
           <EditProfile user={user} />
           <EditAccount email={user?.email} />
         </div>
