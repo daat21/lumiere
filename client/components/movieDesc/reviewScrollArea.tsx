@@ -42,8 +42,8 @@ export default function ReviewScrollArea({ id }: { id: string }) {
 
   return (
     <ScrollArea className="w-full rounded-md border">
-      <div className="flex flex-col gap-6 p-4 px-6">
-        <h4 className="text-xl leading-none font-medium">User reviews</h4>
+      <div className="flex flex-col gap-4 sm:gap-6 p-2 sm:p-4 sm:px-6">
+        <h4 className="text-lg sm:text-xl leading-none font-medium">User reviews</h4>
         {reviews.map(review => (
           <MovieReview
             key={review.id}
