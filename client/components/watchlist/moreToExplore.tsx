@@ -68,13 +68,13 @@ export function MoreToExplore({
   }
 
   return (
-    <div className="mx-4 mt-6">
-      <div className="flex flex-wrap gap-4">
+    <div className="px-4 md:px-0 mt-4 md:mt-6">
+      <div className="flex flex-wrap gap-2 md:gap-4">
         {genres.map(genre => (
           <Badge
             variant="outline"
             key={genre.id}
-            className={`cursor-pointer rounded-2xl px-3 py-1 text-base font-normal transition-colors duration-200 ease-in-out ${
+            className={`cursor-pointer rounded-2xl px-2 md:px-3 py-1 text-sm md:text-base font-normal transition-colors duration-200 ease-in-out ${
               selectedGenreId === genre.id
                 ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                 : 'border-primary text-primary hover:bg-primary hover:text-primary-foreground border'
@@ -87,9 +87,9 @@ export function MoreToExplore({
       </div>
 
       {isLoading && (
-        <div className="mt-4 grid grid-cols-3 justify-items-center">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
           {Array.from({ length: 12 }).map((_, index) => (
-            <div key={index} className="mx-2 my-4">
+            <div key={index} className="mx-2 my-5">
               <MovieBackdropCardSkeleton />
             </div>
           ))}
@@ -98,7 +98,7 @@ export function MoreToExplore({
       {error && <div className="mt-8 text-center text-red-500">{error}</div>}
 
       {!isLoading && !error && (
-        <div className="mt-4 grid grid-cols-3 justify-items-center">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
           {movies.map(movie => (
             <div key={movie.id} className="mx-2 my-5">
               <MovieBackdropCard
@@ -109,7 +109,7 @@ export function MoreToExplore({
             </div>
           ))}
           {movies.length === 0 && (
-            <div className="col-span-3 mt-8 text-center">
+            <div className="col-span-full mt-8 text-center">
               No movies found...
             </div>
           )}
