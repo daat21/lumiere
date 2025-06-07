@@ -17,12 +17,12 @@ export async function NavigationBar() {
         <DropdownMenuComponent />
         <Link href="/" className="flex items-center gap-2">
           <Image src="/lumiere-01-1.svg" alt="Lumiere" width={50} height={50} />
-          <span className="text-lg font-bold sm:text-xl md:text-2xl">
+          <span className="hidden text-lg font-bold md:text-2xl lg:inline">
             Lumiere
           </span>
         </Link>
       </div>
-      <div className="relative hidden w-full max-w-xs sm:block sm:max-w-sm md:max-w-md lg:max-w-lg">
+      <div className="relative w-full max-w-[450px]">
         <SearchBar />
       </div>
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
