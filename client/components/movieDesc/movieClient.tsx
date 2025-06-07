@@ -53,7 +53,10 @@ interface MovieVideos {
   teaserUrl: string
 }
 
-export default function MovieDescComp({ id }: { id: string }) {
+export default function MovieDescComp(
+  { id, user }: 
+  { id: string 
+  user:any|null }) {
   const [movie, setMovie] = useState<MovieDetails | null>(null)
   const [credits, setCredits] = useState<MovieCredits | null>(null)
   const [videos, setVideos] = useState<MovieVideos | null>(null)
@@ -89,14 +92,13 @@ export default function MovieDescComp({ id }: { id: string }) {
     } else if (reviewState?.code == 400) {
       toast.error(
         reviewState.message ||
-          'Failure while posting review... or Review already posted, Kindly update the review via Profile page...'
+          'Failure while posting review... or Review already posted...'
       )
     }
   }, [reviewState])
 
   if (loading) return <p>Please wait! Loading movie details {':)'}</p>
   if (!movie) return <p>No data found, sorry! {':(}'}</p>
-
   // console.log(movie)
 
   return (
@@ -115,7 +117,12 @@ export default function MovieDescComp({ id }: { id: string }) {
           <div className="mt-6" />
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Post a review</Button>
+              <Button onClick={()=>{if(!user)
+              {toast.error('Please login to post a review...')
+                console.log(user)
+                setTimeout(()=>(window.location.href='/login'),1500)
+              }}}>
+                Post a review</Button>
             </DialogTrigger>
             <DialogContent className="w-1/2 sm:max-w-[none]">
               <DialogHeader>
