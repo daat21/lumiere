@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #5e17eb;
+        opacity: .81;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        fill: #ff914d;
+        font-family: Arial-Black, 'Arial Black';
+        font-size: 201.16px;
+        font-weight: 800;
+      }
+
+      .cls-3 {
+        letter-spacing: .02em;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="938.74" cy="848.62" r="382.98"/>
+  <text class="cls-2" transform="translate(423.85 899.98)"><tspan x="0" y="0">Lumie</tspan><tspan class="cls-3" x="670.67" y="0">r</tspan><tspan x="763.2" y="0">e</tspan></text>
+</svg>
