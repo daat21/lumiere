@@ -52,7 +52,7 @@ export function WatchlistBookmark({ movie_id }: { movie_id: string }) {
         setBookmarked(true)
         toast.success('Movie added to Watchlist')
       } else {
-        toast.error('Failure adding to Watchlist')
+        toast.error('Please login to add movie to Watchlist')
       }
     }
   }

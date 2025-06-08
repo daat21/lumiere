@@ -53,7 +53,10 @@ interface MovieVideos {
   teaserUrl: string
 }
 
-export default function MovieDescComp({ id }: { id: string }) {
+export default function MovieDescComp(
+  { id, user }: 
+  { id: string 
+  user:any|null }) {
   const [movie, setMovie] = useState<MovieDetails | null>(null)
   const [credits, setCredits] = useState<MovieCredits | null>(null)
   const [videos, setVideos] = useState<MovieVideos | null>(null)
@@ -89,14 +92,13 @@ export default function MovieDescComp({ id }: { id: string }) {
     } else if (reviewState?.code == 400) {
       toast.error(
         reviewState.message ||
-          'Failure while posting review... or Review already posted, Kindly update the review via Profile page...'
+          'Failure while posting review... or Review already posted...'
       )
     }
   }, [reviewState])
 
   if (loading) return <p>Please wait! Loading movie details {':)'}</p>
   if (!movie) return <p>No data found, sorry! {':(}'}</p>
-
   // console.log(movie)
 
   return (
@@ -115,7 +117,12 @@ export default function MovieDescComp({ id }: { id: string }) {
           <div className="mt-6" />
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Post a review</Button>
+              <Button onClick={()=>{if(!user)
+              {toast.error('Please login to post a review...')
+                console.log(user)
+                setTimeout(()=>(window.location.href='/login'),1500)
+              }}}>
+                Post a review</Button>
             </DialogTrigger>
             <DialogContent className="max-w-full sm:max-w-lg md:mb-0">
               <DialogHeader>
@@ -207,6 +214,7 @@ export default function MovieDescComp({ id }: { id: string }) {
             {videos?.teaserUrl != 'na' && (<Button variant="outline" className="mt-4 mb-4 ml-4" asChild>
               <Link href={videos?.teaserUrl ?? '#'}>Teaser</Link>
             </Button>)}
+            {videos?.trailerUrl == 'na' && videos?.trailerUrl == 'na' && (<div className='font-semibold text-red-600 text-xl'>Apologies, trailer and teaser videos are not available for {movie.original_title} ({movie.release_date.slice(0, 4)}).</div>)}
           </div>
           <div className="mt-4 flex flex-col border-amber-100">
             <ReviewScrollArea id={id} />

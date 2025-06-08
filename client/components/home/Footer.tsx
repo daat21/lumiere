@@ -12,7 +12,7 @@ export function Footer() {
             </p>
             <div className="text-sm md:text-base text-muted-foreground">
               <p className="mb-1">Assistance hours:</p>
-              <p className="font-medium">Monday - Friday: 6 am to 8 pm EST</p>
+              <p className="font-medium">Monday - Friday: 6 am to 8 pm ACST</p>
             </div>
           </div>
           
@@ -24,7 +24,7 @@ export function Footer() {
                 href="mailto:Ineedhelp@info.com" 
                 className="text-sm md:text-base text-primary hover:text-primary/80 font-medium transition-colors"
               >
-                Ineedhelp@info.com
+                customersupport@lumiere.com
               </a>
             </div>
             <div>
@@ -33,7 +33,7 @@ export function Footer() {
                 href="tel:+61999999999" 
                 className="text-sm md:text-base text-primary hover:text-primary/80 font-medium transition-colors"
               >
-                (61) 9 9999-9999
+                +61 1800 123 456
               </a>
             </div>
           </div>
