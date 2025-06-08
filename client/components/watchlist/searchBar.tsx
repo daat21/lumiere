@@ -22,10 +22,12 @@ interface Person {
   name: string
 }
 
-export function SearchBar() {
+export function SearchBar({movies}: {
+  movies: Movie[]
+}) {
   const [query, setQuery] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([])
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>(movies)
   const [movieResults, setMovieResults] = useState<Movie[]>([])
   const [personResults, setPersonResults] = useState<Person[]>([])
   const [isLoadingTrending, setIsLoadingTrending] = useState(false)
@@ -65,8 +67,8 @@ export function SearchBar() {
         ])
 
         // Deduplicate movie results by title using reduce for better type safety
-        const uniqueMovies = movieData
-          ? movieData.reduce((acc: Movie[], current: Movie) => {
+        const uniqueMovies = movieData.results
+          ? movieData.results.reduce((acc: Movie[], current: Movie) => {
               if (!acc.some(movie => movie.title === current.title)) {
                 acc.push(current)
               }
@@ -75,7 +77,7 @@ export function SearchBar() {
           : []
 
         setMovieResults(uniqueMovies) // Set the deduplicated results
-        setPersonResults(personData || [])
+        setPersonResults(personData.results || [])
       } catch (error) {
         console.error('Failed to fetch search results:', error)
         setMovieResults([])

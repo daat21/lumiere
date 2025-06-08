@@ -35,7 +35,7 @@ function Slider({
   const ticks = React.useMemo(() => {
     if (!showTicks) return []
     return Array.from({ length: tickCount }, (_, i) => min + i * step)
-  }, [min, max, step, tickCount, showTicks])
+  }, [min, step, tickCount, showTicks])
 
   return (
     <>

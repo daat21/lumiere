@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Select,
   SelectContent,
@@ -6,13 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useSearchParams } from 'next/navigation'
 
 export function SelectSort() {
+  const searchParams = useSearchParams()
+  const currentValue = searchParams.get('sort_by') || 'popularity.desc'
+
   return (
-    <div className="grid gap-2">
-      <p className="font-bold">Sort by</p>
-      <Select defaultValue="popularity.desc">
-        <SelectTrigger className="w-[140px]">
+    <div className="grid gap-2 w-full sm:w-[180px]">
+      <p className="font-bold text-sm sm:text-base">Sort by</p>
+      <Select defaultValue={currentValue} name="sort_by">
+        <SelectTrigger className="w-full">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

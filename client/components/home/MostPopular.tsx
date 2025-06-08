@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { use } from 'react'
 import { MovieCard } from '@/components/home/MovieCard'
 import {
   Carousel,
@@ -19,8 +18,8 @@ interface Movie {
   vote_average: number
 }
 
-export function MostPopular({ movies }: { movies: Promise<Movie[]> }) {
-  const topRatedMovies = use(movies).slice(0, 10)
+export function MostPopular({ movies }: { movies: Movie[] }) {
+  const topRatedMovies = movies.slice(0, 10)
 
   return (
     <Carousel
@@ -35,21 +34,22 @@ export function MostPopular({ movies }: { movies: Promise<Movie[]> }) {
       }}
       className="mt-6 w-full"
     >
-      <CarouselContent>
+      <CarouselContent className="-ml-2 md:-ml-4">
         {topRatedMovies.map((movie: Movie) => (
-          <CarouselItem key={movie.id} className="basis-1/5 pl-4">
+          <CarouselItem key={movie.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pl-2 md:pl-4">
             <div className="justify-items-center">
               <MovieCard
                 title={movie.title}
                 rating={movie.vote_average}
                 image={movie.poster_path}
+                id={movie.id.toString()}
               />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="hidden sm:flex" />
+      <CarouselNext className="hidden sm:flex" />
     </Carousel>
   )
 }

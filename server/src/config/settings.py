@@ -1,7 +1,6 @@
 import logging
 from functools import lru_cache
-from typing import Optional
-
+from typing import Optional, List
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
@@ -12,7 +11,14 @@ class Settings(BaseSettings):
     # Database Settings
     MONGO_URL: str = Field(default="mongodb://localhost:27017")
     MONGODB_DB: str = Field(default="movie_review_db")
-
+    
+    # CORS settings
+    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    
+    # Avatar settings
+    DEFAULT_AVATAR_URL: str = "https://api.dicebear.com/7.x/avataaars/svg?seed=default"
+    # AVATAR_UPLOAD_DIR: str = "uploads/avatars"
+    
     # Server Settings
     DEBUG: bool = Field(default=True)
     API_V1_PREFIX: str = Field(default="/api/v1")

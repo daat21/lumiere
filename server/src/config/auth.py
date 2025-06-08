@@ -30,7 +30,7 @@ class AuthSettings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
-        extra = "ignore"  # 忽略额外的字段
+        extra = "ignore"  # Ignore the additional fields
 
 
 @lru_cache()

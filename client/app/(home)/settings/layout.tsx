@@ -82,6 +82,17 @@ function settingsLayout({children}:{
                       Showcase how much of a movie buff you are!
                     </p>
                   </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="avatar" className="text-sm font-medium">
+                      Avatar
+                    </label>
+                    <Input id="avatar" placeholder="https://" className=" border-gray-800" />
+                    <p className="text-xs text-gray-400">
+                      Place the URL for your profile picture here.
+                    </p>
+                  </div>
+
                   <div className="flex flex-row justify-between">
                     <div className="space-y-2 w-[28rem] ">
                         <label htmlFor="firstname" className="text-sm font-medium">

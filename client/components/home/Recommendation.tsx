@@ -55,6 +55,7 @@ export function Recomendations() {
                           : movie.overview
                       }
                       className="bg-sidebar"
+                      id={movie.id.toString()}
                     />
                   </li>
                 ))}

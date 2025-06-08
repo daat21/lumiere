@@ -1,24 +1,23 @@
-import re
+import bcrypt
 from datetime import datetime
 from typing import List, Optional
-
-import bcrypt
 from bson import ObjectId
-from fastapi import HTTPException, status
-
+from fastapi import HTTPException, status, UploadFile
 from src.database.connection import mongo
 from src.database.repositories.user import UserRepository
 from src.models import User, UserCreate, UserUpdate
 from src.utils.exceptions import (ResourceNotFoundError, UnauthorizedError,
                                   ValidationError)
+from src.config import settings
 
 
 class UserService:
     def __init__(self, user_repository: Optional[UserRepository] = None):
         self.user_repository = user_repository or UserRepository()
+        #self.avatar_upload_dir = settings.AVATAR_UPLOAD_DIR
+        self.default_avatar_url = settings.DEFAULT_AVATAR_URL
 
     async def create_user(self, user_data: UserCreate) -> User:
-        print("[DEBUG] creating user:", user_data)
         """
         Create a new user.
         """
@@ -47,9 +46,10 @@ class UserService:
             "created_at": now,
             "updated_at": now,
             "last_login": None,
-            "avatar_url": None,
+            "avatar_url": self.default_avatar_url,  # Set default avatar
             "bio": None,
-            "preferences": {}
+            "watchlists": [],
+            "reviews": []
         }
 
         # Insert into database
@@ -96,7 +96,7 @@ class UserService:
             "created_at": now,
             "updated_at": now,
             "last_login": None,
-            "avatar_url": None,
+            "avatar_url": self.default_avatar_url,  # Set default avatar
             "bio": None,
             "preferences": {}
         }
@@ -148,18 +148,6 @@ class UserService:
         return None
 
     async def get_user_by_id(self, user_id: str) -> User:
-        """
-        Get a user by ID.
-
-        Args:
-            user_id: User's ID
-
-        Returns:
-            User object
-
-        Raises:
-            HTTPException: If user not found or ID is invalid
-        """
         try:
             user = await self.user_repository.get_by_id(user_id)
             if not user:
@@ -199,9 +187,12 @@ class UserService:
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"User with id {user_id} not found"
                 )
+            if isinstance(user, dict):
+                user["id"] = str(user["_id"])
+                user = User(**user)
 
             # Check if user is authorized to update
-            if str(user["_id"]) != current_user.id and not current_user.is_superuser:
+            if str(user.id) != current_user.id and not current_user.is_superuser:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail="Not authorized to update this user"
@@ -210,19 +201,18 @@ class UserService:
             # Prepare update data
             update_data = {}
 
-            if user_data.email is not None:
-                # Check if new email is already taken
-                existing_user = await self.get_user_by_email(user_data.email)
-                if existing_user and str(existing_user["_id"]) != user_id:
-                    raise ValidationError("Email already registered")
-                update_data["email"] = user_data.email
-
             if user_data.username is not None:
                 # Check if new username is already taken
                 existing_user = await self.get_user_by_username(user_data.username)
-                if existing_user and str(existing_user["_id"]) != user_id:
+                if existing_user and str(existing_user.id) != user_id:
                     raise ValidationError("Username already taken")
                 update_data["username"] = user_data.username
+
+            if user_data.avatar_url is not None:
+                update_data["avatar_url"] = user_data.avatar_url
+
+            if user_data.bio is not None:
+                update_data["bio"] = user_data.bio
 
             if user_data.new_password is not None:
                 # Verify current password
@@ -232,7 +222,7 @@ class UserService:
 
                 if not bcrypt.checkpw(
                     user_data.current_password.encode('utf-8'),
-                    user["hashed_password"].encode('utf-8')
+                    user.hashed_password.encode('utf-8')
                 ):
                     raise ValidationError("Current password is incorrect")
 
@@ -248,12 +238,10 @@ class UserService:
 
             return await self.get_user_by_id(user_id)
 
-        except ValidationError:
-            raise
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Error updating user: {str(e)}"
+                detail=str(e)
             )
 
     async def delete_user(self, user_id: str, current_user: User) -> bool:
@@ -285,6 +273,10 @@ class UserService:
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail="Not authorized to delete this user"
                 )
+
+            # Delete user's avatar if exists
+            if user.avatar_url:
+                await self.delete_avatar(user_id)
 
             # Delete user
             return await self.user_repository.delete(user_id)
@@ -335,7 +327,8 @@ class UserService:
                     last_login=user.get("last_login"),
                     avatar_url=user.get("avatar_url"),
                     bio=user.get("bio"),
-                    preferences=user.get("preferences", {})
+                    watchlists=user.get("watchlists", []),
+                    reviews=user.get("reviews", [])
                 )
                 for user in users
             ]
@@ -347,3 +340,32 @@ class UserService:
 
     async def get_all_users(self) -> List[User]:
         return await self.user_repository.get_all()
+
+    async def upload_avatar(self, user_id: str, avatar_url: str) -> str:
+        """Update user avatar URL"""
+        # Check if URL is valid
+        if not avatar_url.startswith(('http://', 'https://')):
+            raise ValidationError("Invalid avatar URL.")
+        
+        # Update MongoDB directly
+        await self.user_repository.update(user_id, {"avatar_url": avatar_url})
+        return avatar_url
+
+    async def delete_avatar(self, user_id: str) -> None:
+        """Reset user avatar to default"""
+        # Check if user exists
+        user = await self.get_user_by_id(user_id)
+
+        # Reset to default avatar
+        await self.user_repository.update(user_id, {"avatar_url": self.default_avatar_url})
+
+    async def update_bio(self, user_id: str, bio: str) -> str:
+        """Update user bio"""
+        # Check if user exists
+        user = await self.get_user_by_id(user_id)
+
+        # Update MongoDB directly
+        await self.user_repository.update(user_id, {"bio": bio})
+        return bio
+
+    
